@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Contacto — Imprudente Dept. Creativo</title>
+    <meta name="description" content="Formulario de contacto para Imprudente Dept. Creativo.">
+
+    <!-- Fuentes y estilos principales -->
+    <link rel="stylesheet" href="./General Sans Font/WEB/css/general-sans.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Estilos locales y correcciones para el fondo y nav -->
+    <style>
+        /* ------------------------------------------------------------
+       Z-index: fondo dinámico y overlays
+       - hero-bg: detrás de todo
+       - hero-noise: encima del hero-bg pero detrás del contenido
+       - noise-overlay: textura sutil encima del hero-noise, pero debajo del contenido
+       ------------------------------------------------------------ */
+        #hero-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 0;
+        }
+
+        #hero-noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 0;
+            opacity: 0.06;
+            pointer-events: none;
+            image-rendering: pixelated;
+        }
+
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.06;
+            background-size: cover;
+        }
+
+        /* Asegura que el nav y el formulario estén por encima */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .contact-form-wrapper {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ------------------------------------------------------------
+       Layout: evitar scroll y centrar el formulario
+       ------------------------------------------------------------ */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            background: var(--bg-color);
+        }
+
+        body.contact-no-scroll {
+            overflow: hidden;
+        }
+
+        .contact-page {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 0 1rem;
+        }
+
+        <div class="contact-form-wrapper"><h1>Contáctame</h1><form id="contactForm" class="contact-form" method="POST" action="sendMail.php"><div class="form-group"><label for="nombre">Nombre</label><input type="text" id="nombre" name="nombre" required></div><div class="form-group"><label for="correo">Correo</label><input type="email" id="correo" name="correo" required></div><div class="form-group"><label for="telefono">Teléfono (opcional)</label><input type="tel" id="telefono" name="telefono"></div><div class="form-group"><label for="mensaje">Mensaje</label><textarea id="mensaje" name="mensaje" required></textarea></div><button type="submit" class="cta-btn">Enviar</button></form><div id="status"></div></div><script>const form=document.getElementById("contactForm");
+        const status=document.getElementById("status");
+
+        form.addEventListener("submit", async (e)=> {
+                e.preventDefault();
+                status.innerText="⏳ Enviando...";
+
+                try {
+                    const response=await fetch(form.action, {
+                        method: form.method,
+                        body: new FormData(form)
+                    });
+
+                const result=await response.text();
+
+                if (result==="OK") {
+                    status.innerText="✅ Mensaje enviado correctamente";
+                    form.reset();
+                }
+
+                else {
+                    status.innerText="❌ Error al enviar el mensaje";
+                }
+            }
+
+            catch (error) {
+                status.innerText="⚠️ Problema de conexión";
+            }
+        });
+        </script>
+
+        /* ------------------------------------------------------------
+       Forzar switch a la izquierda dentro de nav-controls
+       ------------------------------------------------------------ */
+        .top-nav .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .top-nav .nav-controls .theme-switch-pill {
+            order: 0;
+            margin-right: 0.5rem;
+        }
+
+        .top-nav .nav-controls a.btn {
+            order: 1;
+        }
+
+        /* Asegura que nav-brand actúe como inicio */
+        .nav-brand {
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+
+        /* Pequeños ajustes responsivos */
+        @media (max-width: 480px) {
+            .contact-form-wrapper {
+                padding: 1.25rem;
+                max-width: 92%;
+            }
+
+            .contact-form .form-group textarea {
+                min-height: 90px;
+            }
+        }
+    </style>
+</head>
+
+<body class="contact-no-scroll">
+    <!-- Overlay de ruido (textura) -->
+    <div class="noise-overlay" aria-hidden="true"
+        style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 250 250%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%221.2%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.04%22/%3E%3C/svg%3E');">
+    </div>
+
+    <!-- Header/Nav universal -->
+    <header class="top-nav" id="top-nav" role="banner">
+        <a href="index.html#home" class="nav-brand" id="nav-brand">Dept. Creativo</a>
+        <div class="nav-controls">
+            <button class="theme-switch-pill" id="theme-switch-pill" aria-label="Cambiar tema día/noche" type="button"
+                aria-pressed="false">
+                <span class="indicator" aria-hidden="true">
+                    <!-- Iconos sol/luna -->
+                    <svg class="moon-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor"
+                        stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor"
+                        stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </span>
+            </button>
+            <!-- Botón Proyectos apunta al índice en index.html -->
+            <a href="index.html#selected-work" class="btn" id="nav-work-btn">Proyectos</a>
+            <!-- Botón Contacto eliminado -->
+        </div>
+    </header>
+
+
+    <!-- Fondo dinámico (permanece detrás del formulario) -->
+    <div id="hero-bg" aria-hidden="true"></div>
+    <canvas id="hero-noise" aria-hidden="true"></canvas>
+
+    <!-- Formulario centrado, contenido compacto y glassmorphism -->
+    <main class="contact-page" role="main" aria-label="Formulario de contacto">
+        <section class="contact-form-wrapper" role="region" aria-labelledby="contact-title">
+            <h1 id="contact-title">Contáctame</h1>
+
+            <form id="contact-form" class="contact-form" novalidate>
+                <div id="group-name" class="form-group">
+                    <label for="name">Nombre</label>
+                    <input type="text" id="name" name="nombre" autocomplete="name" required>
+                    <span class="error-msg">Por favor ingresa tu nombre</span>
+                </div>
+
+                <div id="group-phone" class="form-group">
+                    <label for="phone">Teléfono</label>
+                    <input type="tel" id="phone" name="telefono" autocomplete="tel" inputmode="tel">
+                    <span class="error-msg">Número inválido</span>
+                </div>
+
+                <div id="group-email" class="form-group">
+                    <label for="email">Correo</label>
+                    <input type="email" id="email" name="correo" autocomplete="email" required>
+                    <span class="error-msg">Correo inválido</span>
+                </div>
+
+                <div id="group-message" class="form-group">
+                    <label for="message">Mensaje</label>
+                    <textarea id="message" name="mensaje" rows="5" required></textarea>
+                    <span class="error-msg">Por favor escribe un mensaje</span>
+                </div>
+
+                <div style="display:flex; justify-content:center; margin-top:0.25rem;">
+                    <button type="submit" class="btn contact-submit">Enviar</button>
+                </div>
+            </form>
+
+            <!-- Mensaje de confirmación (script.js lo mostrará) -->
+            <div id="confirm-message" class="confirm-message" aria-hidden="true" role="status"
+                style="display:none; margin-top:0.75rem;">
+                ¡Tu mensaje ha sido enviado con éxito!
+            </div>
+        </section>
+    </main>
+
+    <!-- Referencia al script principal (maneja toggle, fondo dinámico, validación y envío) -->
+    <script src="script.js"></script>
+    <script>
+        const form = document.getElementById("contactForm");
+        const status = document.getElementById("status");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault(); // evita recargar la página
+            status.innerText = "⏳ Enviando...";
+
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: new FormData(form)
+                });
+
+                const result = await response.text();
+                if (result.trim() === "OK") {
+                    status.innerText = "✅ Mensaje enviado correctamente";
+                    form.reset();
+                } else {
+                    status.innerText = "❌ Error al enviar el mensaje";
+                }
+            } catch (error) {
+                status.innerText = "⚠️ Problema de conexión";
+            }
+        });
+    </script>
+
+</body>
+
+</html>

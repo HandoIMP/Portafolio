@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Imprudente Dept. Creativo — Alejandro</title>
+    <meta name="description"
+        content="Portfolio de diseño gráfico, branding y dirección creativa de Alejandro, Imprudente.">
+
+    <!-- Fonts y estilos -->
+    <link rel="stylesheet" href="./General Sans Font/WEB/css/general-sans.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Overlay de ruido -->
+    <div class="noise-overlay" id="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Header/Nav universal -->
+    <header class="top-nav" id="top-nav" role="banner">
+        <a href="#home" class="nav-brand" id="nav-brand">Dept. Creativo</a>
+        <div class="nav-controls">
+            <button class="theme-switch-pill" id="theme-switch-pill" aria-label="Cambiar tema día/noche" type="button"
+                aria-pressed="false">
+                <span class="indicator" aria-hidden="true">
+                    <!-- Iconos sol/luna -->
+                    <svg class="moon-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor"
+                        stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor"
+                        stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </span>
+            </button>
+            <!-- Botón Proyectos apunta al índice -->
+            <a href="#selected-work" class="btn" id="nav-work-btn">Proyectos</a>
+            <!-- Botón Contacto eliminado -->
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+
+        <!-- Hero section -->
+        <section class="hero-header" id="home" aria-label="Hero">
+            <div id="hero-bg" aria-hidden="true"></div>
+            <canvas id="hero-noise" aria-hidden="true"></canvas>
+
+            <!-- Contenedor central: logo + botón -->
+            <div class="hero-center-container">
+                <div class="logo-wrapper">
+                    <img src="LogoSVG_IMP.svg" alt="Imprudente Dept. Creativo" class="main-logo" id="main-logo">
+                </div>
+                <a href="contact.html" class="btn cta-btn" id="cta-trabajemos">Trabajemos juntos</a>
+            </div>
+
+            <!-- Contenedor inferior: textos decorativos -->
+            <div class="hero-corner-container">
+                <div class="corner-text">
+                    <span class="dict-word">Auténtico</span>
+                    <span class="dict-def">adj. Que es genuino, real y fiel a su esencia.</span>
+                </div>
+                <div class="corner-text">
+                    © 2026 Imprudente Dept. Creativo
+                </div>
+            </div>
+        </section>
+
+        <!-- Índice de proyectos -->
+        <section class="section-wrapper container reveal-on-scroll" id="selected-work">
+            <h2 class="section-title">Trabajos Selectos</h2>
+            <ul class="project-list"></ul>
+        </section>
+
+
+
+    </main>
+
+    <!-- Script -->
+    <script src="script.js"></script>
+</body>
+
+</html>

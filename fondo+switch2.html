@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dynamic Portfolio Background</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      background: #000119;
+      font-family: "General Sans Variable", sans-serif;
+      transition: color 0.5s ease;
+    }
+
+    /* Fondo radial dinámico */
+    #bg {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(circle at 50% 50%,
+        #0214B6, #011173, #000119);
+      z-index: 0;
+      transition: background 0.5s ease;
+    }
+
+    /* Canvas de ruido */
+    #noise {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+      opacity: 0.08;
+      pointer-events: none;
+    }
+
+    /* Contenedor superior derecho */
+    .top-right {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 2;
+    }
+
+    /* Botón de texto */
+    .trabajos {
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      color: white; /* noche por defecto */
+    }
+
+    .trabajos:hover {
+      opacity: 0.8;
+    }
+
+    /* Toggle switch */
+    .switch {
+      width: 50px;
+      height: 24px;
+      background: #484848; /* noche */
+      border-radius: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 2px;
+      transition: background 0.5s ease;
+      box-shadow: inset 0 0px 4px rgba(0,0,0,0.3);
+    }
+
+    .knob {
+      width: 20px;
+      height: 20px;
+      background: #EFEFEF; /* noche: #484848 */
+      border-radius: 50%;
+      transition: transform 0.4s ease, background 0.5s ease;
+      box-shadow: inset 0 1px 4px rgba(0,0,0,0.2);
+    }
+
+    /* Día */
+    .switch.day {
+      background: #EFEFEF;
+    }
+
+    .switch.day .knob {
+      transform: translateX(24px);
+      background: #000; /* día: negro */
+    }
+
+    .day-mode .trabajos {
+      color: #000; /* texto negro en día */
+    }
+  </style>
+</head>
+<body>
+  <div id="bg"></div>
+  <canvas id="noise"></canvas>
+
+  <!-- Contenedor superior derecho -->
+  <div class="top-right">
+    <div class="trabajos">Trabajos</div>
+    <div class="switch" id="toggle">
+      <div class="knob"></div>
+    </div>
+  </div>
+
+  <script>
+    const bg = document.getElementById("bg");
+    const toggle = document.getElementById("toggle");
+    const noiseCanvas = document.getElementById("noise");
+    const ctx = noiseCanvas.getContext("2d");
+    const trabajos = document.querySelector(".trabajos");
+
+    noiseCanvas.width = window.innerWidth;
+    noiseCanvas.height = window.innerHeight;
+
+    // Generar ruido procedural
+    function generateNoise() {
+      const imageData = ctx.createImageData(noiseCanvas.width, noiseCanvas.height);
+      for (let i = 0; i < imageData.data.length; i += 4) {
+        const val = Math.random() * 200;
+        imageData.data[i] = val;
+        imageData.data[i+1] = val;
+        imageData.data[i+2] = val;
+        imageData.data[i+3] = 255;
+      }
+      ctx.putImageData(imageData, 0, 0);
+    }
+    setInterval(generateNoise, 80);
+
+    // Interpolación suave (lerp)
+    let targetX = 50, targetY = 50;
+    let currentX = 50, currentY = 50;
+
+    document.addEventListener("mousemove", (event) => {
+      targetX = event.clientX / window.innerWidth * 100;
+      targetY = event.clientY / window.innerHeight * 100;
+    });
+
+    let isDay = false;
+
+    function animateGradient() {
+      currentX += (targetX - currentX) * 0.08;
+      currentY += (targetY - currentY) * 0.08;
+
+      if (isDay) {
+        bg.style.background =
+          `radial-gradient(circle at ${currentX}% ${currentY}%, 
+            #CDFD6C, #DBFE9A, #FDFFFD)`;
+      } else {
+        bg.style.background =
+          `radial-gradient(circle at ${currentX}% ${currentY}%, 
+            #0214B6, #011173, #000119)`;
+      }
+
+      requestAnimationFrame(animateGradient);
+    }
+    animateGradient();
+
+    // Toggle switch
+    toggle.addEventListener("click", () => {
+      isDay = !isDay;
+      toggle.classList.toggle("day", isDay);
+      document.body.classList.toggle("day-mode", isDay);
+    });
+  </script>
+</body>
+</html>
+
