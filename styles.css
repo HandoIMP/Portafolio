@@ -903,7 +903,7 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
     text-transform: uppercase;
     letter-spacing: 0.2em;
     color: var(--accent-color);
-    font-weight: 700;
+    font-weight: 400;
     margin-bottom: 0.75rem;
 }
 
@@ -939,10 +939,11 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
 
 .detail-meta-label {
     font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.08em;
     color: var(--text-muted);
-    font-weight: 600;
+    font-weight: 500;
+    font-style: normal; 
+    text-transform: none;
     margin-bottom: 0.25rem;
 }
 
@@ -1261,8 +1262,8 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
 /* Layout principal: aside fijo + contenido fluido */
 .project-detail-layout {
     display: grid;
-    grid-template-columns: 320px 1fr;
-    /* aside fijo 320px, contenido flexible */
+    grid-template-columns: 552px 1fr;
+    /* aside fijo 15% más ancho que antes */
     gap: 2rem;
     align-items: start;
 }
@@ -1270,7 +1271,7 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
 /* Aside fijo (sticky) */
 .project-fixed-col {
     position: sticky;
-    top: 1.5rem;
+    top: calc(1.5rem + 64px);
     /* distancia desde top (ajusta si tienes header fijo) */
     align-self: start;
     max-height: calc(100vh - 3rem);
@@ -1351,7 +1352,6 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
 .detail-title {
     font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 700;
-    text-transform: uppercase;
     line-height: 1.1;
 }
 
@@ -1360,7 +1360,7 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
     text-transform: uppercase;
     letter-spacing: 0.2em;
     color: var(--accent-color);
-    font-weight: 700;
+    font-weight: 400;
 }
 
 .detail-description {
@@ -1510,109 +1510,6 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
     }
 }
 
-/* ==========================================================================
-   OVERRIDES FOR DETAIL.HTML (High priority, retrocompatible)
-   Paste at end to ensure precedence
-   ========================================================================== */
-
-/* 1) Ensure layout uses container padding as reference and aligns editorial column */
-.project-detail-layout.container {
-    display: grid !important;
-    grid-template-columns: 320px 1fr !important;
-    gap: 2.5rem !important;
-    align-items: start !important;
-    margin-top: 6rem !important;
-    z-index: 2 !important;
-}
-
-/* Guarantee layout stacking context */
-.project-detail-layout {
-    z-index: 2;
-}
-
-/* 2) Force editorial column alignment with container/nav */
-.project-detail-layout.container>.project-fixed-col,
-.project-detail-layout>.project-fixed-col {
-    padding-left: 0 !important;
-    padding-right: 1rem !important;
-    margin-left: 0 !important;
-    position: sticky !important;
-    top: calc(1.5rem + 64px) !important;
-    align-self: start !important;
-    z-index: 3 !important;
-}
-
-/* 3) Prevent accidental left offset from other rules */
-.container .project-fixed-col {
-    margin-left: 0 !important;
-}
-
-/* 4) Metadata row horizontal and aligned with description */
-.project-fixed-col .detail-description {
-    margin: 0 0 1rem 0 !important;
-}
-
-.project-fixed-col .detail-info {
-    display: flex !important;
-    gap: 2.25rem !important;
-    align-items: flex-start !important;
-    margin: 0 0 1.25rem 0 !important;
-    padding: 0 !important;
-    flex-wrap: wrap;
-}
-
-.project-fixed-col .detail-info-item {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0.25rem !important;
-    min-width: 0 !important;
-}
-
-.project-fixed-col .detail-meta-label {
-    font-size: 0.75rem !important;
-    text-transform: uppercase !important;
-    color: var(--text-muted) !important;
-    letter-spacing: 0.12em !important;
-}
-
-.project-fixed-col .detail-meta-val {
-    font-size: 0.95rem !important;
-    color: var(--text-color) !important;
-    font-weight: 600 !important;
-}
-
-/* 5) Ensure gallery and column are above dynamic background */
-.project-detail-layout,
-.project-fixed-col,
-.detail-gallery-wrapper,
-.detail-gallery-track {
-    position: relative !important;
-    z-index: 2 !important;
-}
-
-/* 6) Responsive: stack editorial column on mobile */
-@media (max-width: 900px) {
-
-    .project-detail-layout.container,
-    .project-detail-layout {
-        grid-template-columns: 1fr !important;
-        gap: 1.5rem !important;
-    }
-
-    .project-fixed-col {
-        position: relative !important;
-        top: auto !important;
-        padding-right: 0 !important;
-        margin-left: 0 !important;
-    }
-
-    .project-fixed-col .detail-info {
-        flex-direction: column !important;
-        gap: 1rem !important;
-    }
-
-
-}
 
 /* Botón de envío del formulario: estilo neutral (no usa --accent-color) */
 .contact-submit {
@@ -1673,11 +1570,11 @@ input.contact-submit {
 }
 
 .detail-gallery-track {
-    display: block !important;
+    display: block;
     /* quitar cualquier layout horizontal previo */
     width: 100%;
     box-sizing: border-box;
-    overflow: visible !important;
+    overflow: visible;
     /* permitir flujo natural vertical */
     padding: 0;
     margin: 0;
@@ -1686,7 +1583,7 @@ input.contact-submit {
 /* Cada item apilado verticalmente */
 .gallery-item {
     display: block;
-    margin: 0 0 28px;
+    margin: 0 0 24px;
     /* separación entre imágenes; ajusta a tu gusto */
     padding: 0;
 }
@@ -1705,13 +1602,21 @@ input.contact-submit {
     cursor: pointer;
 }
 
+..project-fixed-col .detail-cta .cta-btn {
+    box-shadow: none;
+}
+
+.project-fixed-col .detail-cta .cta-btn:hover {
+    box-shadow: 0 18px 40px rgba(205, 253, 108, 0.16);
+}
+
 /* --- Organización y espaciado en la columna fija --- */
 .project-fixed-col .detail-meta {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 12px;
     /* espacio entre secciones: título, meta, description, info, cta */
-    padding: 20px;
+    padding: 16px 18px;
     box-sizing: border-box;
     height: calc(100vh - 48px);
     /* mantiene sticky visual si usas position:sticky */
@@ -1723,10 +1628,18 @@ input.contact-submit {
 .detail-info {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px 18px;
+    gap: 10px 12px;
     /* fila flexible con separación horizontal y vertical */
     margin: 0;
     padding: 0;
+}
+
+.project-fixed-col .detail-description {
+    margin: 0 0 1.5rem 0;
+}
+
+.project-fixed-col .detail-credits {
+    display: none;
 }
 
 .detail-info-item {

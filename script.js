@@ -28,6 +28,10 @@ function parseProjects(markdown) {
             title,
             id: '',
             category: '',
+            services: '',
+            client: '',
+            agency: '',
+            year: '',
             cover: '',
             credits: '',
             description: '',
@@ -35,18 +39,38 @@ function parseProjects(markdown) {
         };
 
         let inGallery = false;
+        let currentKey = '';
         lines.forEach(line => {
-            if (line.startsWith('id:')) project.id = line.replace('id:', '').trim();
-            else if (line.startsWith('category:')) project.category = line.replace('category:', '').trim();
-            else if (line.startsWith('cover:')) project.cover = normalizePath(line.replace('cover:', '').trim());
-            else if (line.startsWith('credits:')) project.credits = line.replace('credits:', '').trim();
-            else if (line.startsWith('description:')) project.description = line.replace('description:', '').trim();
-            else if (line.startsWith('gallery:')) {
+            if (/^gallery:\s*$/i.test(line)) {
                 inGallery = true;
-            } else if (inGallery && line.startsWith('-')) {
+                currentKey = 'gallery';
+                return;
+            }
+
+            if (inGallery && line.startsWith('-')) {
                 project.gallery.push(normalizePath(line.replace('-', '').trim()));
-            } else {
-                // cualquier otra línea fuera de gallery la ignoramos por ahora
+                return;
+            }
+
+            const kv = line.match(/^([a-zA-Z0-9_-]+)\s*:\s*(.*)$/);
+            if (kv) {
+                const key = kv[1].trim().toLowerCase();
+                const value = kv[2].trim();
+
+                if (key === 'id' || key === 'category' || key === 'services' || key === 'client' || key === 'agency' || key === 'year' || key === 'credits' || key === 'description') {
+                    project[key] = value;
+                    currentKey = key;
+                    return;
+                }
+                if (key === 'cover') {
+                    project.cover = normalizePath(value);
+                    currentKey = 'cover';
+                    return;
+                }
+            }
+
+            if (currentKey && currentKey !== 'gallery') {
+                project[currentKey] += (project[currentKey] ? '\n' : '') + line;
             }
         });
 
@@ -565,7 +589,10 @@ document.addEventListener('DOMContentLoaded', () => {
    - Asegúrate de que projects.md exista en la ruta relativa correcta
    ========================================================================== */
 (function bootstrapProjects() {
-    fetch('projects.md')
+    // Añadimos cache-buster para forzar recarga al actualizar projects.md
+    const ts = Date.now();
+    const projectsUrl = `projects.md?ts=${ts}`;
+    fetch(projectsUrl, { cache: 'no-store' })
         .then(res => {
             if (!res.ok) throw new Error(`HTTP ${res.status} - ${res.statusText}`);
             return res.text();

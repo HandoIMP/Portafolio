@@ -48,12 +48,13 @@
         <aside class="project-fixed-col" aria-labelledby="project-title">
             <div class="detail-meta" id="detail-meta">
                 <h1 id="project-title" class="detail-title">Cargando…</h1>
-                <div class="detail-category">—</div>
                 <p class="detail-description">Cargando descripción…</p>
 
                 <dl class="detail-info" role="list" id="detail-info">
                     <!-- items inyectados -->
                 </dl>
+
+                <p class="detail-credits" id="detail-credits"></p>
 
                 <div class="detail-cta">
                     <a href="contact.html" class="btn cta-btn" id="cta-contacto">Hablemos</a>
@@ -105,7 +106,10 @@
             }
 
             function fetchText(url) {
-                return fetch(url).then(res => {
+                // Añadimos un cache-buster para forzar la recarga del archivo MD
+                const separator = url.indexOf('?') === -1 ? '?' : '&';
+                const fetchUrl = url + separator + 'ts=' + Date.now();
+                return fetch(fetchUrl, { cache: 'no-store' }).then(res => {
                     if (!res.ok) throw new Error('No se pudo cargar ' + url);
                     return res.text();
                 });
@@ -113,47 +117,73 @@
 
             // Parser simple para tu formato de projects.md
             function parseProjectsMd(mdText) {
+                const normalizePath = (path) => String(path || '').replace(/\\/g, '/');
+
                 // Divide por bloques que empiezan con "## "
                 const blocks = mdText.split(/\n(?=##\s+)/).map(b => b.trim()).filter(Boolean);
                 const projects = [];
 
                 blocks.forEach(block => {
-                    // Primera línea: "## TÍTULO"
                     const lines = block.split('\n').map(l => l.replace(/\r/g, ''));
                     const titleLine = lines[0].replace(/^##\s+/, '').trim();
-                    const obj = { title: titleLine };
+                    const obj = {
+                        title: titleLine,
+                        id: '',
+                        category: '',
+                        services: '',
+                        client: '',
+                        agency: '',
+                        year: '',
+                        cover: '',
+                        credits: '',
+                        description: '',
+                        gallery: []
+                    };
 
-                    // Resto: parse key: value y gallery list
+                    let currentKey = '';
+                    let inGallery = false;
                     let i = 1;
                     while (i < lines.length) {
                         const line = lines[i].trim();
                         if (!line) { i++; continue; }
 
-                        // gallery: list
-                        if (/^gallery:\s*$/.test(line)) {
+                        if (/^gallery:\s*$/i.test(line)) {
+                            inGallery = true;
+                            currentKey = 'gallery';
                             i++;
-                            const gallery = [];
-                            while (i < lines.length && /^\s*-\s+/.test(lines[i])) {
-                                const item = lines[i].replace(/^\s*-\s+/, '').trim();
-                                if (item) gallery.push(item);
-                                i++;
-                            }
-                            obj.gallery = gallery;
                             continue;
                         }
 
-                        // key: value (simple)
-                        const kv = line.match(/^([a-zA-Z0-9_-]+)\s*:\s*(.+)$/);
+                        if (inGallery && /^\s*-\s+/.test(lines[i])) {
+                            const item = lines[i].replace(/^\s*-\s+/, '').trim();
+                            if (item) obj.gallery.push(normalizePath(item));
+                            i++;
+                            continue;
+                        }
+
+                        const kv = line.match(/^([a-zA-Z0-9_-]+)\s*:\s*(.*)$/);
                         if (kv) {
-                            const key = kv[1].trim();
-                            let val = kv[2].trim();
-                            // Si el valor contiene "—" o ";" lo dejamos tal cual; no intentamos convertir tipos
-                            obj[key] = val;
+                            const key = kv[1].trim().toLowerCase();
+                            const value = kv[2].trim();
+                            if (key === 'cover') {
+                                obj.cover = normalizePath(value);
+                                currentKey = 'cover';
+                            } else if (['id', 'category', 'services', 'client', 'agency', 'year', 'credits', 'description'].includes(key)) {
+                                obj[key] = value;
+                                currentKey = key;
+                            } else {
+                                currentKey = '';
+                            }
+                            i++;
+                            continue;
+                        }
+
+                        if (currentKey && currentKey !== 'gallery') {
+                            obj[currentKey] += (obj[currentKey] ? '\n' : '') + line;
                         }
                         i++;
                     }
 
-                    // Normalizar id a minúsculas sin espacios si no existe
                     if (!obj.id) {
                         obj.id = obj.title.toLowerCase().replace(/[^\w-]+/g, '-').replace(/^-+|-+$/g, '');
                     }
@@ -169,14 +199,13 @@
                 // Left column
                 const titleEl = document.getElementById('project-title');
                 const descEl = document.querySelector('.detail-description');
-                const categoryEl = document.querySelector('.detail-category');
                 const infoDl = document.getElementById('detail-info');
+                const creditsEl = document.getElementById('detail-credits');
 
                 if (titleEl) titleEl.textContent = project.title || '';
                 if (descEl) descEl.textContent = project.description || '';
-                if (categoryEl) categoryEl.textContent = project.category || '';
 
-                // Limpiar y añadir metadatos (credits, year, services, client si existen)
+                // Limpiar y añadir metadatos (services, client, year)
                 infoDl.innerHTML = '';
                 const pushInfo = (label, value) => {
                     if (!value) return;
@@ -194,11 +223,14 @@
                     infoDl.appendChild(wrapper);
                 };
 
-                // Si en projects.md tienes keys como credits, client, year, services, las mostramos
-                pushInfo('Créditos', project.credits);
                 pushInfo('Servicios', project.services || project.services_list || project.services);
                 pushInfo('Cliente', project.client || project.cliente);
+                pushInfo('Agencia', project.agency || project.agency);
                 pushInfo('Año', project.year || project.Year || project.year);
+
+                if (creditsEl) {
+                    creditsEl.textContent = project.credits || '';
+                }
 
                 // CTA: si quieres personalizar el enlace con mailto o similar, puedes hacerlo aquí
                 const cta = document.getElementById('cta-contacto');
