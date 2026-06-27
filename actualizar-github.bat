@@ -8,6 +8,6 @@ if not exist .git (
 
 git add .
 git commit -m "Actualiza portfolio"
-git push origin main
+git push origin main --force
 
 pause
