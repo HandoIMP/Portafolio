@@ -248,22 +248,18 @@
             
             const formData = new FormData(form);
             
-            // Enviamos los datos de manera asíncrona (AJAX)
+            // Enviamos los datos de manera asíncrona con no-cors para evitar el bloqueo CORS del redirect de Google
             fetch(form.action, {
                 method: 'POST',
-                body: formData
+                body: formData,
+                mode: 'no-cors'
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.result === 'success') {
-                    form.reset(); // Limpia los campos del formulario
-                    form.style.display = 'none'; // Esconde el formulario
-                    exito.style.display = 'block'; // Muestra el cartel de éxito
-                } else {
-                    alert('Hubo un error en el servidor. Por favor, inténtalo más tarde.');
-                    btnEnviar.innerText = "Enviar Mensaje";
-                    btnEnviar.disabled = false;
-                }
+            .then(response => {
+                // Al usar 'no-cors', la respuesta es opaca. No podemos leer data.result,
+                // pero si el navegador no arrojó un error de red, la petición se envió con éxito.
+                form.reset(); // Limpia los campos del formulario
+                form.style.display = 'none'; // Esconde el formulario
+                exito.style.display = 'block'; // Muestra el cartel de éxito
             })
             .catch(error => {
                 console.error('Error:', error);
