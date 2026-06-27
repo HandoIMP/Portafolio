@@ -90,36 +90,6 @@
             z-index: 2;
         }
 
-        <div class="contact-form-wrapper"><h1>Contáctame</h1><form id="contactForm" class="contact-form" method="POST" action="sendMail.php"><div class="form-group"><label for="nombre">Nombre</label><input type="text" id="nombre" name="nombre" required></div><div class="form-group"><label for="correo">Correo</label><input type="email" id="correo" name="correo" required></div><div class="form-group"><label for="telefono">Teléfono (opcional)</label><input type="tel" id="telefono" name="telefono"></div><div class="form-group"><label for="mensaje">Mensaje</label><textarea id="mensaje" name="mensaje" required></textarea></div><button type="submit" class="cta-btn">Enviar</button></form><div id="status"></div></div><script>const form=document.getElementById("contactForm");
-        const status=document.getElementById("status");
-
-        form.addEventListener("submit", async (e)=> {
-                e.preventDefault();
-                status.innerText="⏳ Enviando...";
-
-                try {
-                    const response=await fetch(form.action, {
-                        method: form.method,
-                        body: new FormData(form)
-                    });
-
-                const result=await response.text();
-
-                if (result==="OK") {
-                    status.innerText="✅ Mensaje enviado correctamente";
-                    form.reset();
-                }
-
-                else {
-                    status.innerText="❌ Error al enviar el mensaje";
-                }
-            }
-
-            catch (error) {
-                status.innerText="⚠️ Problema de conexión";
-            }
-        });
-        </script>
 
         /* ------------------------------------------------------------
        Forzar switch a la izquierda dentro de nav-controls
@@ -208,40 +178,36 @@
         <section class="contact-form-wrapper" role="region" aria-labelledby="contact-title">
             <h1 id="contact-title">Contáctame</h1>
 
-            <form id="contact-form" class="contact-form" novalidate>
+            <form id="formContacto" class="contact-form" action="https://script.google.com/macros/s/AKfycbza6iXxwc-duxhutu49qL_wrSDW6fL9Fc4nHYI7DoNheMZj4OyIoBmWI-H_17y-1AhZ/exec" method="POST">
                 <div id="group-name" class="form-group">
                     <label for="name">Nombre</label>
-                    <input type="text" id="name" name="nombre" autocomplete="name" required>
-                    <span class="error-msg">Por favor ingresa tu nombre</span>
+                    <input type="text" id="name" name="name" autocomplete="name" required placeholder="Tu nombre">
                 </div>
 
                 <div id="group-phone" class="form-group">
-                    <label for="phone">Teléfono</label>
-                    <input type="tel" id="phone" name="telefono" autocomplete="tel" inputmode="tel">
-                    <span class="error-msg">Número inválido</span>
+                    <label for="phone">Teléfono (opcional)</label>
+                    <input type="tel" id="phone" name="phone" autocomplete="tel" inputmode="tel" placeholder="Tu teléfono">
                 </div>
 
                 <div id="group-email" class="form-group">
                     <label for="email">Correo</label>
-                    <input type="email" id="email" name="correo" autocomplete="email" required>
-                    <span class="error-msg">Correo inválido</span>
+                    <input type="email" id="email" name="email" autocomplete="email" required placeholder="tu@correo.com">
                 </div>
 
                 <div id="group-message" class="form-group">
                     <label for="message">Mensaje</label>
-                    <textarea id="message" name="mensaje" rows="5" required></textarea>
-                    <span class="error-msg">Por favor escribe un mensaje</span>
+                    <textarea id="message" name="message" rows="5" required placeholder="Escribe tu mensaje aquí..."></textarea>
                 </div>
 
                 <div style="display:flex; justify-content:center; margin-top:0.25rem;">
-                    <button type="submit" class="btn contact-submit">Enviar</button>
+                    <button type="submit" id="btnEnviar" class="btn contact-submit">Enviar Mensaje</button>
                 </div>
             </form>
 
-            <!-- Mensaje de confirmación (script.js lo mostrará) -->
-            <div id="confirm-message" class="confirm-message" aria-hidden="true" role="status"
-                style="display:none; margin-top:0.75rem;">
-                ¡Tu mensaje ha sido enviado con éxito!
+            <!-- Mensaje de confirmación -->
+            <div id="mensajeExito" class="confirm-message" role="status"
+                style="display:none; margin-top:0.75rem; color: var(--accent-color); font-weight: bold; padding: 16px; background: var(--btn-bg); border: 1px solid var(--btn-border); border-radius: 8px; text-align: center;">
+                ¡Gracias! Tu mensaje ha sido enviado con éxito y guardado en el sistema. Te responderemos pronto.
             </div>
         </section>
     </main>
@@ -269,29 +235,42 @@
     <!-- Referencia al script principal (maneja toggle, fondo dinámico, validación y envío) -->
     <script src="script.js"></script>
     <script>
-        const form = document.getElementById("contactForm");
-        const status = document.getElementById("status");
+        const form = document.getElementById('formContacto');
+        const exito = document.getElementById('mensajeExito');
+        const btnEnviar = document.getElementById('btnEnviar');
 
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault(); // evita recargar la página
-            status.innerText = "⏳ Enviando...";
-
-            try {
-                const response = await fetch(form.action, {
-                    method: form.method,
-                    body: new FormData(form)
-                });
-
-                const result = await response.text();
-                if (result.trim() === "OK") {
-                    status.innerText = "✅ Mensaje enviado correctamente";
-                    form.reset();
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Evita que la página se recargue o redirija
+            
+            // Cambiamos el texto del botón para dar feedback al usuario
+            btnEnviar.innerText = "⏳ Enviando...";
+            btnEnviar.disabled = true;
+            
+            const formData = new FormData(form);
+            
+            // Enviamos los datos de manera asíncrona (AJAX)
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.result === 'success') {
+                    form.reset(); // Limpia los campos del formulario
+                    form.style.display = 'none'; // Esconde el formulario
+                    exito.style.display = 'block'; // Muestra el cartel de éxito
                 } else {
-                    status.innerText = "❌ Error al enviar el mensaje";
+                    alert('Hubo un error en el servidor. Por favor, inténtalo más tarde.');
+                    btnEnviar.innerText = "Enviar Mensaje";
+                    btnEnviar.disabled = false;
                 }
-            } catch (error) {
-                status.innerText = "⚠️ Problema de conexión";
-            }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error de conexión. Inténtalo de nuevo.');
+                btnEnviar.innerText = "Enviar Mensaje";
+                btnEnviar.disabled = false;
+            });
         });
     </script>
 
