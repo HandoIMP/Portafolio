@@ -319,8 +319,15 @@ body {
 }
 
 @keyframes float-logo {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-6px) rotate(0.5deg); }
+
+    0%,
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-6px) rotate(0.5deg);
+    }
 }
 
 /* CTA under logo: mantener centrado */
@@ -451,12 +458,29 @@ body {
 }
 
 /* Floating animations on the images inside the draggable wrappers (with unique default angles) */
-.hero-asset.asset-silence .asset-image { animation: float-silence 6s ease-in-out infinite; }
-.hero-asset.asset-camera .asset-image { animation: float-camera 5s ease-in-out infinite 0.5s; }
-.hero-asset.asset-pelican .asset-image { animation: float-pelican 7s ease-in-out infinite 1s; }
-.hero-asset.asset-shirt .asset-image { animation: float-shirt 5.5s ease-in-out infinite 0.2s; }
-.hero-asset.asset-palette .asset-image { animation: float-palette 6.5s ease-in-out infinite 0.8s; }
-.hero-asset.asset-poster .asset-image { animation: float-poster 7.5s ease-in-out infinite 1.5s; }
+.hero-asset.asset-silence .asset-image {
+    animation: float-silence 6s ease-in-out infinite;
+}
+
+.hero-asset.asset-camera .asset-image {
+    animation: float-camera 5s ease-in-out infinite 0.5s;
+}
+
+.hero-asset.asset-pelican .asset-image {
+    animation: float-pelican 7s ease-in-out infinite 1s;
+}
+
+.hero-asset.asset-shirt .asset-image {
+    animation: float-shirt 5.5s ease-in-out infinite 0.2s;
+}
+
+.hero-asset.asset-palette .asset-image {
+    animation: float-palette 6.5s ease-in-out infinite 0.8s;
+}
+
+.hero-asset.asset-poster .asset-image {
+    animation: float-poster 7.5s ease-in-out infinite 1.5s;
+}
 
 /* Asymmetric Positioning around the center hero content (with Llavero centered above the logo) */
 .hero-asset.asset-silence {
@@ -507,33 +531,75 @@ body {
 
 /* Keyframes for out-of-sync floating effects preserving default angles */
 @keyframes float-silence {
-    0%, 100% { transform: translateY(0px) rotate(-12deg); }
-    50% { transform: translateY(-10px) rotate(-10.5deg); }
+
+    0%,
+    100% {
+        transform: translateY(0px) rotate(-12deg);
+    }
+
+    50% {
+        transform: translateY(-10px) rotate(-10.5deg);
+    }
 }
 
 @keyframes float-camera {
-    0%, 100% { transform: translateY(0px) rotate(15deg); }
-    50% { transform: translateY(-7px) rotate(14deg); }
+
+    0%,
+    100% {
+        transform: translateY(0px) rotate(15deg);
+    }
+
+    50% {
+        transform: translateY(-7px) rotate(14deg);
+    }
 }
 
 @keyframes float-pelican {
-    0%, 100% { transform: translateY(0px) rotate(-8deg); }
-    50% { transform: translateY(-12px) rotate(-6.5deg); }
+
+    0%,
+    100% {
+        transform: translateY(0px) rotate(-8deg);
+    }
+
+    50% {
+        transform: translateY(-12px) rotate(-6.5deg);
+    }
 }
 
 @keyframes float-shirt {
-    0%, 100% { transform: translateY(0px) rotate(10deg); }
-    50% { transform: translateY(-8px) rotate(8.5deg); }
+
+    0%,
+    100% {
+        transform: translateY(0px) rotate(10deg);
+    }
+
+    50% {
+        transform: translateY(-8px) rotate(8.5deg);
+    }
 }
 
 @keyframes float-palette {
-    0%, 100% { transform: translateY(0px) rotate(-18deg); }
-    50% { transform: translateY(-9px) rotate(-16.5deg); }
+
+    0%,
+    100% {
+        transform: translateY(0px) rotate(-18deg);
+    }
+
+    50% {
+        transform: translateY(-9px) rotate(-16.5deg);
+    }
 }
 
 @keyframes float-poster {
-    0%, 100% { transform: translateY(0px) rotate(6deg); }
-    50% { transform: translateY(-11px) rotate(7.5deg); }
+
+    0%,
+    100% {
+        transform: translateY(0px) rotate(6deg);
+    }
+
+    50% {
+        transform: translateY(-11px) rotate(7.5deg);
+    }
 }
 
 /* ==========================================================================
@@ -541,6 +607,8 @@ body {
    ========================================================================== */
 .info-cards-section {
     padding: 6rem 0 3rem 0;
+    position: relative;
+    z-index: 2;
 }
 
 .info-cards-wrap {
@@ -558,6 +626,12 @@ body {
     margin-top: 2.5rem;
 }
 
+@media (max-width: 900px) {
+    .info-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .info-card {
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -572,7 +646,7 @@ body {
 }
 
 .info-card h3 {
-    margin: 0;
+    margin: auto 0 0 0;
     font-size: clamp(1.25rem, 1.6vw, 1.5rem);
 }
 
@@ -639,111 +713,122 @@ body.day-mode .info-card .info-icon {
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.18);
 }
+
 /* 1) Grid principal: content-wrapper | icon */
 .project-link {
-  display: grid;
-  grid-template-columns: 1fr auto; /* contenido (thumb+title) | icono */
-  align-items: center;
-  gap: 1rem;
-  height: 140px;
-  overflow: hidden;
-  padding: 0.5rem 0;
-  text-decoration: none;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    /* contenido (thumb+title) | icono */
+    align-items: center;
+    gap: 1rem;
+    height: 140px;
+    overflow: hidden;
+    padding: 0.5rem 0;
+    text-decoration: none;
 }
 
 /* 2) Subcontenedor que agrupa thumbnail + título */
 .project-content-wrapper {
-  display: grid;
-  grid-template-columns: auto 1fr; /* thumb | title */
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    /* thumb | title */
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
 }
 
 /* 3) Thumbnail dentro del flujo (participa en el grid) */
 .project-thumb-wrap {
-  width: var(--thumb-w, 320px); /* ancho por defecto; opcionalmente actualizado por JS */
-  height: calc(100% - 1rem);
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255,255,255,0.03);
-  border-radius: 12px;
-  transform: translateX(-8px) scale(0.98);
-  opacity: 0;
-  transition: opacity .45s ease, transform .45s cubic-bezier(.16,1,.3,1);
+    width: var(--thumb-w, 320px);
+    /* ancho por defecto; opcionalmente actualizado por JS */
+    height: calc(100% - 1rem);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    transform: translateX(-8px) scale(0.98);
+    opacity: 0;
+    transition: opacity .45s ease, transform .45s cubic-bezier(.16, 1, .3, 1);
 }
 
 /* 4) Imagen mantiene proporción */
 .project-thumb {
-  width: auto;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  min-width: 160px;
+    width: auto;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    min-width: 160px;
 }
 
 /* 5) Título dentro del wrapper */
 .project-text {
-  padding: 1rem;
-  font-size: clamp(1.2rem, 1.8vw, 1.7rem);
-  font-weight: 700;
-  color: var(--text-color);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: transform .45s cubic-bezier(.16,1,.3,1);
+    padding: 1rem;
+    font-size: clamp(1.2rem, 1.8vw, 1.7rem);
+    font-weight: 700;
+    color: var(--text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: transform .45s cubic-bezier(.16, 1, .3, 1);
 }
 
 /* 6) Icono a la derecha (columna 2 del grid principal) */
 .project-link-icon {
-  width: 42px;
-  height: 42px;
-  justify-self: end;
-  margin-right: 1rem;
-  transition: transform .3s ease, opacity .3s ease;
+    width: 42px;
+    height: 42px;
+    justify-self: end;
+    margin-right: 1rem;
+    transition: transform .3s ease, opacity .3s ease;
 }
 
 /* 7) Hover: revelar thumbnail (grid empuja título naturalmente) */
 @media (hover: hover) and (pointer: fine) {
-  .project-item:hover .project-thumb-wrap,
-  .project-item:focus-within .project-thumb-wrap {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-  /* opcional: pequeño nudge visual al título */
-  .project-item:hover .project-text,
-  .project-item:focus-within .project-text {
-    transform: translateX(6px);
-  }
+
+    .project-item:hover .project-thumb-wrap,
+    .project-item:focus-within .project-thumb-wrap {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+
+    /* opcional: pequeño nudge visual al título */
+    .project-item:hover .project-text,
+    .project-item:focus-within .project-text {
+        transform: translateX(6px);
+    }
 }
 
 /* 8) Mobile: stack layout */
 @media (max-width: 900px) {
-  .project-link {
-    grid-template-columns: 1fr; /* icono se reubica dentro del flujo si hace falta */
-    height: auto;
-  }
-  .project-content-wrapper {
-    grid-template-columns: 1fr;
-    gap: .75rem;
-  }
-  .project-thumb-wrap {
-    width: 100%;
-    height: 220px;
-    transform: none;
-    opacity: 1;
-  }
-  .project-text {
-    white-space: normal;
-    padding: 1rem;
-  }
-  .project-link-icon {
-    justify-self: start;
-    margin-right: 0;
-    margin-top: .5rem;
-  }
+    .project-link {
+        grid-template-columns: 1fr;
+        /* icono se reubica dentro del flujo si hace falta */
+        height: auto;
+    }
+
+    .project-content-wrapper {
+        grid-template-columns: 1fr;
+        gap: .75rem;
+    }
+
+    .project-thumb-wrap {
+        width: 100%;
+        height: 220px;
+        transform: none;
+        opacity: 1;
+    }
+
+    .project-text {
+        white-space: normal;
+        padding: 1rem;
+    }
+
+    .project-link-icon {
+        justify-self: start;
+        margin-right: 0;
+        margin-top: .5rem;
+    }
 }
 
 /* ==========================================================================
@@ -753,6 +838,8 @@ body.day-mode .info-card .info-icon {
     border-top: 1px solid var(--card-border);
     padding: 4rem 0 3rem;
     transition: var(--theme-transition);
+    position: relative;
+    z-index: 2;
 }
 
 .footer-grid {
@@ -1044,6 +1131,8 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
     padding: 6rem 0;
     border-top: 1px solid var(--card-border);
     transition: var(--theme-transition);
+    position: relative;
+    z-index: 2;
 }
 
 .section-title {
@@ -1147,6 +1236,13 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
     /* si prefieres que el fondo del título se mantenga alineado */
 }
 
+@media (max-width: 900px) {
+    .section-title {
+        margin-left: 0;
+        padding-left: 0;
+    }
+}
+
 
 /* ---------- Project list container (asegúrate que no haya un punto suelto antes del selector) ---------- */
 .project-list {
@@ -1235,6 +1331,7 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
 }
 
 @media (hover: hover) and (pointer: fine) {
+
     /* Hover: mostrar thumbnail y empujar título */
     .project-item:hover .project-thumb-wrap,
     .project-item:focus-within .project-thumb-wrap {
@@ -1254,35 +1351,61 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
 /* Responsive: en pantallas pequeñas, miniatura arriba y título debajo */
 @media (max-width: 900px) {
     .project-link {
-        flex-direction: column;
-        align-items: flex-start;
-        height: auto;
-        padding-left: 0 !important;
+        display: block;
+        height: 250px;
+        padding: 0 !important;
         width: 100%;
+        position: relative;
+        border-radius: 24px;
+        overflow: hidden;
     }
 
     .project-thumb-wrap {
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
-        height: 200px;
+        height: 100%;
         transform: none;
         opacity: 1;
+        border-radius: 0;
+        z-index: 1;
     }
 
     .project-thumb {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        border-radius: 0;
+        transition: filter 0.3s ease;
     }
 
     .project-text {
-        transform: none;
-        margin-top: 0.75rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
         white-space: normal;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        text-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+        z-index: 2;
+        pointer-events: none;
+        width: 90%;
     }
 
     .project-link-icon {
-        margin-left: 0;
-        align-self: flex-end;
+        display: none;
+    }
+
+    .project-link.active-tap .project-thumb {
+        filter: blur(8px) brightness(0.6);
+    }
+
+    .project-link.active-tap .project-text {
+        opacity: 1;
     }
 }
 
@@ -1397,7 +1520,7 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
     letter-spacing: 0.08em;
     color: var(--text-muted);
     font-weight: 500;
-    font-style: normal; 
+    font-style: normal;
     text-transform: none;
     margin-bottom: 0.25rem;
 }
@@ -1721,6 +1844,9 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
     /* aside fijo 15% más ancho que antes */
     gap: 2rem;
     align-items: start;
+    padding-top: 140px;
+    position: relative;
+    z-index: 2;
 }
 
 /* Aside fijo (sticky) */
@@ -1792,6 +1918,7 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
 @media (max-width: 900px) {
     .project-detail-layout {
         grid-template-columns: 1fr;
+        padding-top: 110px;
     }
 
     .project-fixed-col {
@@ -2045,7 +2172,9 @@ input.contact-submit {
 
 /* Imágenes en tamaño real dentro del flujo vertical */
 .gallery-item img,
-.detail-gallery-track img {
+.gallery-item video,
+.detail-gallery-track img,
+.detail-gallery-track video {
     display: block;
     width: 100%;
     /* ocupan el ancho disponible de la columna derecha */

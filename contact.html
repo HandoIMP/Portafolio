@@ -81,12 +81,13 @@
         }
 
         .contact-page {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            padding: 0 1rem;
+            padding: 100px 1rem 4rem;
+            z-index: 2;
         }
 
         <div class="contact-form-wrapper"><h1>Contáctame</h1><form id="contactForm" class="contact-form" method="POST" action="sendMail.php"><div class="form-group"><label for="nombre">Nombre</label><input type="text" id="nombre" name="nombre" required></div><div class="form-group"><label for="correo">Correo</label><input type="email" id="correo" name="correo" required></div><div class="form-group"><label for="telefono">Teléfono (opcional)</label><input type="tel" id="telefono" name="telefono"></div><div class="form-group"><label for="mensaje">Mensaje</label><textarea id="mensaje" name="mensaje" required></textarea></div><button type="submit" class="cta-btn">Enviar</button></form><div id="status"></div></div><script>const form=document.getElementById("contactForm");
@@ -159,7 +160,7 @@
     </style>
 </head>
 
-<body class="contact-no-scroll">
+<body>
     <!-- Overlay de ruido (textura) -->
     <div class="noise-overlay" aria-hidden="true"
         style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 250 250%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%221.2%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.04%22/%3E%3C/svg%3E');">
@@ -244,6 +245,26 @@
             </div>
         </section>
     </main>
+
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-copy">
+                <p class="footer-overline">Genera un impacto hoy, contáctanos.</p>
+                <a href="mailto:hola@imprudente.club" class="footer-email">hola@imprudente.club</a>
+                <p class="footer-text">Heroica Guaymas, Sonora, México</p>
+                <p class="footer-text">+52 622 127 03 62</p>
+            </div>
+            <div class="footer-actions-col">
+                <div class="footer-links">
+                    <a href="index.html#home">Inicio</a>
+                    <a href="index.html#selected-work">Portafolio</a>
+                    <a href="contact.html">Contacto</a>
+                    <a href="https://wa.me/526221270362" target="_blank" rel="noreferrer">WhatsApp</a>
+                </div>
+                <p class="footer-copyright">© 2026 Imprudente DC Todos los derechos reservados TM</p>
+            </div>
+        </div>
+    </footer>
 
     <!-- Referencia al script principal (maneja toggle, fondo dinámico, validación y envío) -->
     <script src="script.js"></script>

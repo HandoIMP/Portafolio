@@ -60,9 +60,7 @@
                     <a href="contact.html" class="btn cta-btn" id="cta-contacto">Hablemos</a>
                 </div>
 
-                <div class="footer-small">
-                    <p class="footer-copyright">© 2026 Imprudente Dept. Creativo</p>
-                </div>
+            </div>
             </div>
         </aside>
 
@@ -73,6 +71,26 @@
             </div>
         </section>
     </main>
+
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-copy">
+                <p class="footer-overline">Genera un impacto hoy, contáctanos.</p>
+                <a href="mailto:hola@imprudente.club" class="footer-email">hola@imprudente.club</a>
+                <p class="footer-text">Heroica Guaymas, Sonora, México</p>
+                <p class="footer-text">+52 622 127 03 62</p>
+            </div>
+            <div class="footer-actions-col">
+                <div class="footer-links">
+                    <a href="index.html#home">Inicio</a>
+                    <a href="index.html#selected-work">Portafolio</a>
+                    <a href="contact.html">Contacto</a>
+                    <a href="https://wa.me/526221270362" target="_blank" rel="noreferrer">WhatsApp</a>
+                </div>
+                <p class="footer-copyright">© 2026 Imprudente DC Todos los derechos reservados TM</p>
+            </div>
+        </div>
+    </footer>
 
     <!-- Lightbox (estilos inline mínimos para no depender de CSS adicional) -->
     <div id="project-lightbox" class="project-lightbox" role="dialog" aria-modal="true" aria-hidden="true"
@@ -85,6 +103,9 @@
                 style="position:absolute;left:8px;top:50%;transform:translateY(-50%);background:transparent;border:none;color:#fff;font-size:40px;cursor:pointer;padding:8px">‹</button>
             <img id="lb-image" src="" alt=""
                 style="max-width:100%;max-height:92vh;border-radius:6px;box-shadow:0 12px 40px rgba(0,0,0,0.6);">
+            <video id="lb-video" src=""
+                style="display:none;max-width:100%;max-height:92vh;border-radius:6px;box-shadow:0 12px 40px rgba(0,0,0,0.6);"
+                controls playsinline></video>
             <button id="lb-next" aria-label="Siguiente"
                 style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:transparent;border:none;color:#fff;font-size:40px;cursor:pointer;padding:8px">›</button>
             <div id="lb-caption"
@@ -253,29 +274,59 @@
                     const fig = document.createElement('figure');
                     fig.className = 'gallery-item';
 
-                    const img = document.createElement('img');
+                    const isVideo = /\.(mp4|webm|mov|ogg)$/i.test(src);
 
-                    img.src = src;
-                    img.alt = `${project.title} — imagen ${idx + 1}`;
-                    img.loading = 'lazy';
+                    if (isVideo) {
+                        const video = document.createElement('video');
+                        video.src = src;
+                        video.autoplay = true;
+                        video.loop = true;
+                        video.muted = true;
+                        video.playsInline = true;
+                        video.setAttribute('playsinline', '');
+                        video.setAttribute('muted', '');
+                        video.controls = false;
 
-                    img.onload = () => {
+                        video.onloadedmetadata = () => {
+                            const w = video.videoWidth;
+                            const h = video.videoHeight;
 
-                        const w = img.naturalWidth;
-                        const h = img.naturalHeight;
+                            if (w > h * 1.15) {
+                                fig.classList.add('landscape');
+                            }
+                            else if (h > w * 1.15) {
+                                fig.classList.add('portrait');
+                            }
+                            else {
+                                fig.classList.add('square');
+                            }
+                        };
 
-                        if (w > h * 1.15) {
-                            fig.classList.add('landscape');
-                        }
-                        else if (h > w * 1.15) {
-                            fig.classList.add('portrait');
-                        }
-                        else {
-                            fig.classList.add('square');
-                        }
-                    };
+                        fig.appendChild(video);
+                    } else {
+                        const img = document.createElement('img');
+                        img.src = src;
+                        img.alt = `${project.title} — imagen ${idx + 1}`;
+                        img.loading = 'lazy';
 
-                    fig.appendChild(img);
+                        img.onload = () => {
+                            const w = img.naturalWidth;
+                            const h = img.naturalHeight;
+
+                            if (w > h * 1.15) {
+                                fig.classList.add('landscape');
+                            }
+                            else if (h > w * 1.15) {
+                                fig.classList.add('portrait');
+                            }
+                            else {
+                                fig.classList.add('square');
+                            }
+                        };
+
+                        fig.appendChild(img);
+                    }
+
                     galleryTrack.appendChild(fig);
 
                 });
@@ -286,24 +337,43 @@
             // Lightbox (usa elementos ya presentes en DOM)
             function initLightbox() {
                 const galleryTrack = document.getElementById('detail-gallery');
-                const imgNodes = Array.from(galleryTrack.querySelectorAll('img'));
+                const mediaNodes = Array.from(galleryTrack.querySelectorAll('img, video'));
                 const lightbox = document.getElementById('project-lightbox');
                 const lbImage = document.getElementById('lb-image');
+                const lbVideo = document.getElementById('lb-video');
                 const lbCaption = document.getElementById('lb-caption');
                 const lbClose = document.getElementById('lb-close');
                 const lbPrev = document.getElementById('lb-prev');
                 const lbNext = document.getElementById('lb-next');
 
-                if (!lightbox || imgNodes.length === 0) return;
+                if (!lightbox || mediaNodes.length === 0) return;
 
                 let currentIndex = 0;
 
                 function openLightbox(index) {
-                    const img = imgNodes[index];
-                    if (!img) return;
-                    lbImage.src = img.src;
-                    lbImage.alt = img.alt || '';
-                    lbCaption.textContent = img.alt || `${index + 1} / ${imgNodes.length}`;
+                    const media = mediaNodes[index];
+                    if (!media) return;
+
+                    const src = media.src;
+                    const isVideo = media.tagName.toLowerCase() === 'video';
+
+                    if (isVideo) {
+                        lbImage.style.display = 'none';
+                        lbImage.src = '';
+                        lbVideo.style.display = 'block';
+                        lbVideo.src = src;
+                        lbVideo.play().catch(e => console.log('Autoplay blocked or failed', e));
+                        lbCaption.textContent = media.alt || `Video ${index + 1} / ${mediaNodes.length}`;
+                    } else {
+                        lbVideo.style.display = 'none';
+                        lbVideo.pause();
+                        lbVideo.src = '';
+                        lbImage.style.display = 'block';
+                        lbImage.src = src;
+                        lbImage.alt = media.alt || '';
+                        lbCaption.textContent = media.alt || `${index + 1} / ${mediaNodes.length}`;
+                    }
+
                     lightbox.style.display = 'flex';
                     lightbox.setAttribute('aria-hidden', 'false');
                     currentIndex = index;
@@ -316,23 +386,25 @@
                     lightbox.style.display = 'none';
                     lightbox.setAttribute('aria-hidden', 'true');
                     lbImage.src = '';
+                    lbVideo.pause();
+                    lbVideo.src = '';
                     document.documentElement.style.overflow = '';
                     document.body.style.overflow = '';
                 }
 
                 function showIndex(delta) {
-                    currentIndex = (currentIndex + delta + imgNodes.length) % imgNodes.length;
+                    currentIndex = (currentIndex + delta + mediaNodes.length) % mediaNodes.length;
                     openLightbox(currentIndex);
                 }
 
                 // Bind events
-                imgNodes.forEach((img, idx) => {
-                    if (!img.hasAttribute('tabindex')) img.setAttribute('tabindex', '0');
-                    img.addEventListener('click', (e) => {
+                mediaNodes.forEach((media, idx) => {
+                    if (!media.hasAttribute('tabindex')) media.setAttribute('tabindex', '0');
+                    media.addEventListener('click', (e) => {
                         e.preventDefault();
                         openLightbox(idx);
                     });
-                    img.addEventListener('keydown', (e) => {
+                    media.addEventListener('keydown', (e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
                             e.preventDefault();
                             openLightbox(idx);

@@ -129,6 +129,7 @@ function renderProjectList(projectsArray) {
     // Después de insertar los elementos en el DOM, actualizamos thumbs y slugs
     updateThumbWidths();
     addSlugLinks();
+    setupMobileHover();
 }
 
 /* ==========================================================================
@@ -166,11 +167,26 @@ function addSlugLinks() {
     });
 }
 
+function setupMobileHover() {
+    const isMobile = window.matchMedia('(max-width: 900px)').matches;
+    if (!isMobile) return;
+
+    const links = document.querySelectorAll('.project-link');
+    links.forEach(link => {
+        link.addEventListener('click', function (e) {
+            if (!this.classList.contains('active-tap')) {
+                e.preventDefault();
+                links.forEach(l => l.classList.remove('active-tap'));
+                this.classList.add('active-tap');
+            }
+        });
+    });
+}
+
 function updateThumbWidths() {
     const isDesktop = window.matchMedia('(min-width: 901px)').matches;
     const items = Array.from(document.querySelectorAll('.project-item'));
     if (!items.length) return;
-
     items.forEach(item => {
         const link = item.querySelector('.project-link');
         const img = item.querySelector('.project-thumb');
@@ -179,22 +195,28 @@ function updateThumbWidths() {
 
         if (!isDesktop) {
             link.style.removeProperty('--thumb-w');
-            link.style.removeProperty('padding-left');
             return;
         }
 
-        // Si la imagen aún no tiene dimensiones (no cargada), esperar un poco
-        const rect = img.getBoundingClientRect();
-        if (rect.width === 0 && rect.height === 0) {
-            // reintentar después de 120ms
+        const imgWidth = img.naturalWidth;
+        const imgHeight = img.naturalHeight;
+        if (imgWidth === 0 || imgHeight === 0) {
             setTimeout(updateThumbWidths, 120);
             return;
         }
 
+        const wrapHeight = wrap.getBoundingClientRect().height;
+        if (wrapHeight === 0) {
+            setTimeout(updateThumbWidths, 120);
+            return;
+        }
+
+        const ratio = imgWidth / imgHeight;
+        const computedWidth = Math.round(wrapHeight * ratio);
         const paddingLeft = parseFloat(getComputedStyle(wrap).getPropertyValue('padding-left')) || 0;
-        const total = Math.round(rect.width + paddingLeft);
+        const total = computedWidth + paddingLeft;
+
         link.style.setProperty('--thumb-w', total + 'px');
-        link.style.paddingLeft = `calc(${total}px + 1rem)`;
     });
 }
 
@@ -459,17 +481,17 @@ document.addEventListener('DOMContentLoaded', () => {
         heroAssets.forEach(asset => {
             asset.style.transition = 'none';
             asset.style.opacity = '0.1';
-            
+
             const assetRect = asset.getBoundingClientRect();
             const relativeLeft = assetRect.left - heroRect.left;
             const relativeTop = assetRect.top - heroRect.top;
-            
+
             const assetCenterX = relativeLeft + assetRect.width / 2;
             const assetCenterY = relativeTop + assetRect.height / 2;
-            
+
             const offsetX = centerX - assetCenterX;
             const offsetY = centerY - assetCenterY;
-            
+
             asset.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(0.1)`;
         });
 
@@ -481,7 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
             asset.style.transition = `transform 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}ms, opacity 1.2s ease ${delay}ms`;
             asset.style.transform = 'translate(0px, 0px) scale(1)';
             asset.style.opacity = '1';
-            
+
             setTimeout(() => {
                 asset.style.transition = '';
                 asset.style.willChange = '';
@@ -509,10 +531,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const startY = Number(asset.dataset.dragStartY) || 0;
         const deltaX = e.clientX - startX;
         const deltaY = e.clientY - startY;
-        
+
         // Dynamic tilt based on horizontal movement distance
         const tilt = Math.max(-15, Math.min(15, deltaX * 0.08));
-        
+
         asset.style.transform = `translate(${deltaX}px, ${deltaY}px) rotate(${tilt}deg)`;
     }
 
