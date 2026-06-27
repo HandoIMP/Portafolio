@@ -438,6 +438,99 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     animateHeroGradient();
 
+    // Hero draggable assets
+    const heroAssets = Array.from(document.querySelectorAll('.hero-asset'));
+    heroAssets.forEach(asset => {
+        asset.addEventListener('pointerdown', handleAssetPointerDown);
+        asset.addEventListener('pointermove', handleAssetPointerMove);
+        asset.addEventListener('pointerup', handleAssetPointerUp);
+        asset.addEventListener('pointercancel', handleAssetPointerUp);
+    });
+
+    // Play entrance animation from center with a spring effect
+    function playEntranceAnimation() {
+        const hero = document.getElementById('home');
+        if (!hero || heroAssets.length === 0) return;
+
+        const heroRect = hero.getBoundingClientRect();
+        const centerX = heroRect.width / 2;
+        const centerY = heroRect.height / 2;
+
+        heroAssets.forEach(asset => {
+            asset.style.transition = 'none';
+            asset.style.opacity = '0.1';
+            
+            const assetRect = asset.getBoundingClientRect();
+            const relativeLeft = assetRect.left - heroRect.left;
+            const relativeTop = assetRect.top - heroRect.top;
+            
+            const assetCenterX = relativeLeft + assetRect.width / 2;
+            const assetCenterY = relativeTop + assetRect.height / 2;
+            
+            const offsetX = centerX - assetCenterX;
+            const offsetY = centerY - assetCenterY;
+            
+            asset.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(0.1)`;
+        });
+
+        // Trigger reflow
+        void hero.offsetHeight;
+
+        heroAssets.forEach((asset, idx) => {
+            const delay = idx * 60;
+            asset.style.transition = `transform 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}ms, opacity 1.2s ease ${delay}ms`;
+            asset.style.transform = 'translate(0px, 0px) scale(1)';
+            asset.style.opacity = '1';
+            
+            setTimeout(() => {
+                asset.style.transition = '';
+                asset.style.willChange = '';
+            }, 1500 + delay);
+        });
+    }
+
+    // Run entrance after a short delay to ensure positioning settles
+    setTimeout(playEntranceAnimation, 100);
+
+    function handleAssetPointerDown(e) {
+        const asset = e.currentTarget;
+        asset.setPointerCapture(e.pointerId);
+        asset.classList.add('is-dragging');
+        asset.dataset.dragStartX = e.clientX;
+        asset.dataset.dragStartY = e.clientY;
+        asset.style.transition = 'none';
+        asset.style.willChange = 'transform';
+    }
+
+    function handleAssetPointerMove(e) {
+        const asset = e.currentTarget;
+        if (!asset.classList.contains('is-dragging')) return;
+        const startX = Number(asset.dataset.dragStartX) || 0;
+        const startY = Number(asset.dataset.dragStartY) || 0;
+        const deltaX = e.clientX - startX;
+        const deltaY = e.clientY - startY;
+        
+        // Dynamic tilt based on horizontal movement distance
+        const tilt = Math.max(-15, Math.min(15, deltaX * 0.08));
+        
+        asset.style.transform = `translate(${deltaX}px, ${deltaY}px) rotate(${tilt}deg)`;
+    }
+
+    function handleAssetPointerUp(e) {
+        const asset = e.currentTarget;
+        if (!asset.classList.contains('is-dragging')) return;
+        asset.releasePointerCapture(e.pointerId);
+        asset.classList.remove('is-dragging');
+        asset.classList.add('is-returning');
+        asset.style.transform = 'translate(0, 0) rotate(0deg)';
+        asset.style.transition = 'transform 0.55s cubic-bezier(0.23, 1, 0.32, 1)';
+        window.setTimeout(() => {
+            asset.classList.remove('is-returning');
+            asset.style.transition = '';
+            asset.style.willChange = '';
+        }, 560);
+    }
+
     // Lightbox handlers
     if (lightboxEl) lightboxEl.addEventListener('click', closeLightbox);
     window.addEventListener('keydown', (e) => {

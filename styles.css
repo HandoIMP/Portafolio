@@ -11,7 +11,7 @@
 
     --thumb-w: 240px;
     /* valor por defecto; JS actualizará por proyecto */
-    --thumb-gap: 1rem;
+    --thumb-gap: 0.35rem;
     /* espacio entre thumb y título */
 
     /* Night Mode Variables (Default) */
@@ -234,7 +234,7 @@ body {
 /* Contenedor central */
 .hero-center-container {
     position: absolute;
-    top: 50%;
+    top: 57.5%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
@@ -315,6 +315,12 @@ body {
     filter: var(--logo-filter);
     transition: filter 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.3s ease;
     transform-origin: center center;
+    animation: float-logo 8s ease-in-out infinite;
+}
+
+@keyframes float-logo {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-6px) rotate(0.5deg); }
 }
 
 /* CTA under logo: mantener centrado */
@@ -367,6 +373,456 @@ body {
     stroke: var(--text-muted);
     stroke-width: 2;
     animation: bounceArrow 1.5s infinite;
+}
+
+/* ==========================================================================
+   Hero interactive assets
+   ========================================================================== */
+.hero-assets {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.hero-asset {
+    position: absolute;
+    width: clamp(100px, 15vw, 170px);
+    height: clamp(100px, 15vw, 170px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    outline: none;
+    pointer-events: auto;
+    cursor: grab;
+    touch-action: none;
+    z-index: 5;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.hero-asset:active {
+    cursor: grabbing;
+}
+
+.hero-asset .asset-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.12));
+    transition: filter 0.3s ease, transform 0.3s ease;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+/* 20% size increase for Pelican and Shirt replaced with requested scaling:
+   - llavero (poster): +80% (1.8x)
+   - pelican: +90% (1.9x)
+   - shirt (puma): +70% (1.7x)
+   - palette (color pallets): +50% (1.5x)
+   - silence: +40% (1.4x) with 5% border-radius
+*/
+.hero-asset.asset-poster {
+    width: clamp(180px, 27vw, 306px);
+    height: clamp(180px, 27vw, 306px);
+}
+
+.hero-asset.asset-pelican {
+    width: clamp(190px, 28.5vw, 323px);
+    height: clamp(190px, 28.5vw, 323px);
+}
+
+.hero-asset.asset-shirt {
+    width: clamp(170px, 25.5vw, 289px);
+    height: clamp(170px, 25.5vw, 289px);
+}
+
+.hero-asset.asset-palette {
+    width: clamp(150px, 22.5vw, 255px);
+    height: clamp(150px, 22.5vw, 255px);
+}
+
+.hero-asset.asset-silence {
+    width: clamp(140px, 21vw, 238px);
+    height: clamp(140px, 21vw, 238px);
+}
+
+/* Floating animations on the images inside the draggable wrappers (with unique default angles) */
+.hero-asset.asset-silence .asset-image { animation: float-silence 6s ease-in-out infinite; }
+.hero-asset.asset-camera .asset-image { animation: float-camera 5s ease-in-out infinite 0.5s; }
+.hero-asset.asset-pelican .asset-image { animation: float-pelican 7s ease-in-out infinite 1s; }
+.hero-asset.asset-shirt .asset-image { animation: float-shirt 5.5s ease-in-out infinite 0.2s; }
+.hero-asset.asset-palette .asset-image { animation: float-palette 6.5s ease-in-out infinite 0.8s; }
+.hero-asset.asset-poster .asset-image { animation: float-poster 7.5s ease-in-out infinite 1.5s; }
+
+/* Asymmetric Positioning around the center hero content (with Llavero centered above the logo) */
+.hero-asset.asset-silence {
+    top: 15%;
+    left: 3%;
+}
+
+.hero-asset.asset-camera {
+    top: 50%;
+    left: 8%;
+}
+
+.hero-asset.asset-pelican {
+    bottom: 8%;
+    left: 2%;
+}
+
+.hero-asset.asset-shirt {
+    top: 12%;
+    right: 4%;
+}
+
+.hero-asset.asset-palette {
+    bottom: 12%;
+    right: 3%;
+}
+
+/* Keychain (poster) centered above the logo */
+.hero-asset.asset-poster {
+    top: 8%;
+    left: calc(50% - clamp(90px, 13.5vw, 153px));
+}
+
+.hero-asset.is-dragging {
+    transition: none;
+    z-index: 100;
+}
+
+.hero-asset.is-dragging .asset-image {
+    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.22));
+    transform: scale(1.08);
+    animation-play-state: paused;
+}
+
+.hero-asset.is-returning {
+    transition: transform 0.85s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Keyframes for out-of-sync floating effects preserving default angles */
+@keyframes float-silence {
+    0%, 100% { transform: translateY(0px) rotate(-12deg); }
+    50% { transform: translateY(-10px) rotate(-10.5deg); }
+}
+
+@keyframes float-camera {
+    0%, 100% { transform: translateY(0px) rotate(15deg); }
+    50% { transform: translateY(-7px) rotate(14deg); }
+}
+
+@keyframes float-pelican {
+    0%, 100% { transform: translateY(0px) rotate(-8deg); }
+    50% { transform: translateY(-12px) rotate(-6.5deg); }
+}
+
+@keyframes float-shirt {
+    0%, 100% { transform: translateY(0px) rotate(10deg); }
+    50% { transform: translateY(-8px) rotate(8.5deg); }
+}
+
+@keyframes float-palette {
+    0%, 100% { transform: translateY(0px) rotate(-18deg); }
+    50% { transform: translateY(-9px) rotate(-16.5deg); }
+}
+
+@keyframes float-poster {
+    0%, 100% { transform: translateY(0px) rotate(6deg); }
+    50% { transform: translateY(-11px) rotate(7.5deg); }
+}
+
+/* ==========================================================================
+   Info cards section
+   ========================================================================== */
+.info-cards-section {
+    padding: 6rem 0 3rem 0;
+}
+
+.info-cards-wrap {
+    display: grid;
+    gap: 2.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.info-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+    margin-top: 2.5rem;
+}
+
+.info-card {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 28px;
+    padding: 3.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    min-height: 380px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+.info-card h3 {
+    margin: 0;
+    font-size: clamp(1.25rem, 1.6vw, 1.5rem);
+}
+
+.info-card p {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+.info-card .info-icon {
+    width: 52px;
+    height: 52px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--accent-color);
+    font-size: 1.6rem;
+}
+
+.info-card .info-icon img {
+    width: 32px;
+    height: 32px;
+    filter: var(--logo-filter);
+}
+
+body.day-mode .info-card {
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+}
+
+body.day-mode .info-card .info-icon {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--accent-color);
+}
+
+/* ==========================================================================
+   Project list hover cards
+   ========================================================================== */
+.project-list {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+}
+
+.project-item {
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+    transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+
+.project-item:hover,
+.project-item:focus-within {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.18);
+}
+/* 1) Grid principal: content-wrapper | icon */
+.project-link {
+  display: grid;
+  grid-template-columns: 1fr auto; /* contenido (thumb+title) | icono */
+  align-items: center;
+  gap: 1rem;
+  height: 140px;
+  overflow: hidden;
+  padding: 0.5rem 0;
+  text-decoration: none;
+}
+
+/* 2) Subcontenedor que agrupa thumbnail + título */
+.project-content-wrapper {
+  display: grid;
+  grid-template-columns: auto 1fr; /* thumb | title */
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+/* 3) Thumbnail dentro del flujo (participa en el grid) */
+.project-thumb-wrap {
+  width: var(--thumb-w, 320px); /* ancho por defecto; opcionalmente actualizado por JS */
+  height: calc(100% - 1rem);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  transform: translateX(-8px) scale(0.98);
+  opacity: 0;
+  transition: opacity .45s ease, transform .45s cubic-bezier(.16,1,.3,1);
+}
+
+/* 4) Imagen mantiene proporción */
+.project-thumb {
+  width: auto;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  min-width: 160px;
+}
+
+/* 5) Título dentro del wrapper */
+.project-text {
+  padding: 1rem;
+  font-size: clamp(1.2rem, 1.8vw, 1.7rem);
+  font-weight: 700;
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: transform .45s cubic-bezier(.16,1,.3,1);
+}
+
+/* 6) Icono a la derecha (columna 2 del grid principal) */
+.project-link-icon {
+  width: 42px;
+  height: 42px;
+  justify-self: end;
+  margin-right: 1rem;
+  transition: transform .3s ease, opacity .3s ease;
+}
+
+/* 7) Hover: revelar thumbnail (grid empuja título naturalmente) */
+@media (hover: hover) and (pointer: fine) {
+  .project-item:hover .project-thumb-wrap,
+  .project-item:focus-within .project-thumb-wrap {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  /* opcional: pequeño nudge visual al título */
+  .project-item:hover .project-text,
+  .project-item:focus-within .project-text {
+    transform: translateX(6px);
+  }
+}
+
+/* 8) Mobile: stack layout */
+@media (max-width: 900px) {
+  .project-link {
+    grid-template-columns: 1fr; /* icono se reubica dentro del flujo si hace falta */
+    height: auto;
+  }
+  .project-content-wrapper {
+    grid-template-columns: 1fr;
+    gap: .75rem;
+  }
+  .project-thumb-wrap {
+    width: 100%;
+    height: 220px;
+    transform: none;
+    opacity: 1;
+  }
+  .project-text {
+    white-space: normal;
+    padding: 1rem;
+  }
+  .project-link-icon {
+    justify-self: start;
+    margin-right: 0;
+    margin-top: .5rem;
+  }
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.main-footer {
+    border-top: 1px solid var(--card-border);
+    padding: 4rem 0 3rem;
+    transition: var(--theme-transition);
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 2.5rem;
+    align-items: flex-start;
+}
+
+.footer-copy {
+    display: grid;
+    gap: 1rem;
+}
+
+.footer-overline {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.footer-email {
+    color: var(--text-color);
+    font-size: clamp(1.3rem, 2vw, 1.55rem);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.footer-text {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+.footer-actions-col {
+    display: grid;
+    gap: 1.5rem;
+    justify-items: end;
+}
+
+.footer-links {
+    display: grid;
+    gap: 0.85rem;
+    text-align: right;
+}
+
+.footer-links a {
+    color: var(--text-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: var(--accent-color);
+}
+
+@media (max-width: 900px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .footer-actions-col {
+        justify-items: start;
+    }
+
+    .footer-links {
+        text-align: left;
+    }
 }
 
 .scroll-indicator span {
@@ -695,11 +1151,12 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
 /* ---------- Project list container (asegúrate que no haya un punto suelto antes del selector) ---------- */
 .project-list {
     width: 100%;
-    margin: 0;
+    max-width: 1100px;
+    margin: 0 auto;
     /* si quieres que el título esté en el borde izquierdo */
     padding: 0;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
     list-style: none;
 }
 
@@ -721,22 +1178,25 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
     text-decoration: none;
     padding-left: 0;
     position: relative;
-    transition: padding-left .45s cubic-bezier(.16, 1, .3, 1);
 }
 
 /* Thumb wrapper: reservado el espacio pero oculto visualmente hasta hover */
 .project-thumb-wrap {
-    width: 0;
-    height: 100%;
-    /* altura fija para mantener proporción visual */
+    position: absolute;
+    left: 0;
+    top: 0.75rem;
+    height: calc(100% - 1.5rem);
+    width: 1px;
+    /* inicializado en 1px según especificación */
     flex-shrink: 0;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: left;
     background: transparent;
-    transition: transform .45s cubic-bezier(.16, 1, .3, 1), opacity .45s ease;
-    transform: translateX(-30%);
+    border-radius: 16px;
+    transition: width .75s cubic-bezier(0.25, 1, 0.5, 1), transform .75s cubic-bezier(0.25, 1, 0.5, 1), opacity .75s ease;
+    transform: translateX(-40px);
     /* ligeramente fuera al inicio */
     opacity: 0;
 }
@@ -744,11 +1204,10 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
 /* Imagen: mantener proporción original, centrada dentro del wrapper */
 .project-thumb {
     height: 100%;
+    width: 100%;
     display: block;
-    object-fit: contain;
-    transform-origin: left center;
-    /* ancla la expansión al borde izquierdo */
-    /* mantiene proporción y centra la imagen */
+    object-fit: cover;
+    border-radius: 16px;
 }
 
 /* Texto del proyecto: pegado al borde izquierdo del área disponible */
@@ -757,8 +1216,8 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
     font-size: clamp(1.15rem, 1.5vw, 1.5rem);
     font-weight: 600;
     color: var(--text-color);
-    transform: translateX(0);
-    transition: transform .65s cubic-bezier(.16, 1, .3, 1);
+    margin-left: 0;
+    transition: margin-left .75s cubic-bezier(0.25, 1, 0.5, 1);
     text-align: left;
     white-space: nowrap;
     overflow: hidden;
@@ -782,17 +1241,13 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
         width: var(--thumb-w);
         /* se expande al ancho real */
         opacity: 1;
+        transform: translateX(0);
     }
 
-    .project-item:hover .project-link,
-    .project-item:focus-within .project-link {
-        padding-left: calc(var(--thumb-w) + var(--thumb-gap));
-    }
-
+    /* El título se desplaza empujado por margin-left mientras el enlace no cambia su padding */
     .project-item:hover .project-text,
     .project-item:focus-within .project-text {
-        transform: translateX(24px);
-        /* empuja el título cuando aparece la miniatura */
+        margin-left: calc(var(--thumb-w) + var(--thumb-gap));
     }
 }
 

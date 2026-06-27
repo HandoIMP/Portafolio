@@ -11,14 +11,10 @@
             "id": "dd5a82d98ecb004c",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "projects.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "projects"
+              "title": "Nueva pestaña"
             }
           }
         ]
@@ -185,29 +181,29 @@
   },
   "active": "dd5a82d98ecb004c",
   "lastOpenFiles": [
+    "SVGS/finger-print",
+    "SVGS/shield-check",
+    "SVGS/trophy.svg",
+    "SVGS/shield-check.svg",
+    "SVGS/rectangle-group.svg",
+    "SVGS/fire.svg",
+    "SVGS/finger-print.svg",
+    "SVGS/envelope-open.svg",
+    "SVGS/check-badge.svg",
+    "SVGS/briefcase.svg",
+    "SVGS/bolt.svg",
+    "SVGS/academic-cap.svg",
+    "SVGS",
+    "Assets-General",
+    "Assets",
+    "SVGS/Assets",
+    "SVGS/envelope-open",
+    "SVGS/check-badge",
+    "projects.md",
     "actualizar-github.bat",
     "Boska_Complete/License/FFL.txt",
     "Boska_Complete/License",
-    "Boska_Complete/Fonts/WEB/css/boska.css",
-    "Boska_Complete/Fonts/WEB/css",
-    "Boska_Complete/Fonts/WEB/fonts/Boska-Extralight.ttf",
-    "Boska_Complete/Fonts/WEB/fonts/Boska-Extralight.woff",
-    "Boska_Complete/Fonts/WEB/fonts/Boska-Extralight.woff2",
-    "Boska_Complete/Fonts/WEB/fonts/Boska-Extralight.eot",
-    "Boska_Complete/Fonts/WEB/fonts/Boska-ExtralightItalic.ttf",
-    "Boska_Complete/Fonts/WEB/fonts/Boska-ExtralightItalic.woff",
     "Boska_Complete/Fonts/WEB/README.md",
-    "portfolio-assets/05.Las Luchas/cover.webp",
-    "portfolio-assets/05.Las Luchas/01 - copia.webp",
-    "portfolio-assets/05.Las Luchas/03.webp",
-    "portfolio-assets/05.Las Luchas/01.webp",
-    "portfolio-assets/05.Las Luchas/02.webp",
-    "portfolio-assets/05.Las Luchas/04.webp",
-    "portfolio-assets/05.Las Luchas/05.webp",
-    "portfolio-assets/05.Las Luchas/Mesa de trabajo9.webp",
-    "portfolio-assets/05.Las Luchas/06.webp",
-    "portfolio-assets/05.Las Luchas/07.webp",
-    "projects.md",
     "detail - copia.md",
     "portfolio-assets/projects.md"
   ]
