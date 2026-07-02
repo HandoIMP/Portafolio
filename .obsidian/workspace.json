@@ -11,10 +11,32 @@
             "id": "dd5a82d98ecb004c",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "projects.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "Nueva pestaña"
+              "title": "projects"
+            }
+          }
+        ]
+      },
+      {
+        "id": "585e595247b88cf0",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "bbd20ddc97cd95d1",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "portfolio-assets/11.Alugama/0_1.webp"
+              },
+              "icon": "lucide-image",
+              "title": "0_1"
             }
           }
         ]
@@ -181,6 +203,8 @@
   },
   "active": "dd5a82d98ecb004c",
   "lastOpenFiles": [
+    "portfolio-assets/11.Alugama/0_1.webp",
+    "projects.md",
     "Untitled-1.html",
     "SVGS/finger-print",
     "SVGS/shield-check",
@@ -193,16 +217,13 @@
     "SVGS/check-badge.svg",
     "SVGS/briefcase.svg",
     "SVGS/bolt.svg",
-    "SVGS/academic-cap.svg",
     "SVGS",
     "Assets-General",
     "Assets",
     "SVGS/Assets",
     "SVGS/envelope-open",
     "SVGS/check-badge",
-    "projects.md",
     "actualizar-github.bat",
-    "Boska_Complete/License/FFL.txt",
     "Boska_Complete/Fonts/WEB/README.md",
     "detail - copia.md",
     "portfolio-assets/projects.md"

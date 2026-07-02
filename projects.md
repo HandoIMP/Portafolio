@@ -24,6 +24,7 @@ description: Identidad corporativa y estrategia visual para constructora en Guay
 Creación de una identidad limpia y original, con sistema visual coherente y adaptable. Se diseñaron lineamientos gráficos y aplicaciones que transmiten confianza y profesionalismo en el sector de la construcción.
 credits: Identidad de marca desarrollada.
 client: HC Construcción
+agency: Imprudente Dept. Creativo
 year: 2025
 gallery:
   - portfolio-assets/02.HCconstruccion/cover.webp
@@ -40,6 +41,7 @@ cover: portfolio-assets\03.ElectromecanicaSC\cover.webp
 description: Rediseño corporativo y aplicaciones de marca para taller en San Carlos, Nuevo Guaymas. 
 Actualización de la identidad visual con un enfoque contemporáneo. Se desarrollaron aplicaciones de marca consistentes para comunicación interna y externa, fortaleciendo la presencia del taller en su comunidad.
 credits: Brand Identity & Strategy: Alejandro 
+agency: Imprudente Dept. Creativo
 client: Electromecanica San Carlos
 year: 2024
 gallery:
@@ -58,6 +60,7 @@ description: Naming, branding y contenido para empresa turística en San Carlos,
 Creación de nombre, marca, fotografía, ilustración y contenido digital para redes sociales. Se gestionó publicidad in‑house dirigida al sector turístico, con campañas visuales que conectan con visitantes y residentes.
 credits: Brand Identity & Strategy: Alejandro 
 client: NaluExperience
+agency: Diseñador In-House
 year: 2024
 gallery:
   - portfolio-assets\04.NaluExperience\cover.webp
@@ -127,3 +130,26 @@ gallery:
   - portfolio-assets/10.QuickLift/06.webp
   - portfolio-assets/10.QuickLift/07.webp
   - portfolio-assets/10.QuickLift/08.webp
+
+## Alugama
+id: Alugama
+category: Events & Marketing
+services: Branding & Marketing
+cover: portfolio-assets/11.Alugama/0_1.webp
+description: Marketing estratégico desde el interior de la empresa y branding sub empresa Go Glass. Desarrollamos materiales publicitarios para medios digitales tanto como tradicionales, basados en campañas de venta por redes sociales, correo electrónico y en asistencia a eventos presenciales. Se coordino y diseño el Stand Publicitario en Expo Glass Tech 2023.
+credits: Brand Identity & Strategy: Alejandro 
+agency: Diseñador In-House
+client: Alugama & Go Glass
+year: 2023
+gallery:
+  - portfolio-assets/11.Alugama/0_2.webp
+  - portfolio-assets/11.Alugama/0_3.webp
+  - portfolio-assets/11.Alugama/0_4.webp
+  - portfolio-assets/11.Alugama/0_5.webp
+  - portfolio-assets/11.Alugama/0_6.webp
+  - portfolio-assets/11.Alugama/0_7.webp
+  - portfolio-assets/11.Alugama/0_8.webp
+  - portfolio-assets/11.Alugama/0_9.webp
+  - portfolio-assets/11.Alugama/0_10.webp
+  - portfolio-assets/11.Alugama/0_11.webp
+  - portfolio-assets/11.Alugama/0_12.webp
