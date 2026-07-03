@@ -72,6 +72,8 @@ gallery:
   - portfolio-assets/04.NaluExperience/07.webp
   - portfolio-assets/04.NaluExperience/08.webp
   - portfolio-assets/04.NaluExperience/09.webp
+  - https://youtube.com/shorts/WN3P_74Zu4s
+  - 
 
 ## Las Luchas
 

@@ -133,7 +133,7 @@
 <body>
     <!-- Overlay de ruido (textura) -->
     <div class="noise-overlay" aria-hidden="true"
-        style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 250 250%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%221.2%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.04%22/%3E%3C/svg%3E');">
+        style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 250 250%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%224.5%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.04%22/%3E%3C/svg%3E');">
     </div>
 
     <!-- Header/Nav universal -->
@@ -218,20 +218,29 @@
     </main>
 
     <footer class="main-footer">
-        <div class="container footer-grid">
-            <div class="footer-copy">
-                <p class="footer-overline">Genera un impacto hoy, contáctanos.</p>
-                <a href="mailto:hola@imprudente.club" class="footer-email">hola@imprudente.club</a>
-                <p class="footer-text">Heroica Guaymas, Sonora, México</p>
+        <div class="footer-logo-container">
+            <img src="Imprudente%20SVG.svg" alt="Imprudente Dept. Creativo" class="footer-logo">
+        </div>
+        <div class="container footer-grid-3col">
+            <!-- Columna 1 -->
+            <div class="footer-col footer-col-brand">
+                <p class="footer-cta-phrase">Genera un impacto hoy, contáctanos.</p>
+                <a href="contact.html" class="btn footer-cta-btn">Trabajemos juntos</a>
             </div>
-            <div class="footer-actions-col">
-                <div class="footer-links">
-                    <a href="index.html#home">Inicio</a>
-                    <a href="index.html#selected-work">Portafolio</a>
-                    <a href="contact.html">Contacto</a>
-                    <a href="https://wa.me/526221270362" target="_blank" rel="noreferrer">WhatsApp</a>
+            <!-- Columna 2 -->
+            <div class="footer-col footer-col-links">
+                <h3 class="footer-subtitle">Enlaces</h3>
+                <div class="footer-links-list">
+                    <a href="https://instagram.com" target="_blank" rel="noreferrer" class="footer-link-item">Instagram</a>
+                    <a href="https://wa.me/526221270362" target="_blank" rel="noreferrer" class="footer-link-item">WhatsApp</a>
+                    <a href="index.html#home" class="footer-link-item">Inicio</a>
                 </div>
-                <p class="footer-copyright">© 2026 Imprudente Dept. Creativo</p>
+            </div>
+            <!-- Columna 3 -->
+            <div class="footer-col footer-col-info">
+                <p class="footer-email-lead"><a href="mailto:imprudente.sw@gmail.com">Imprudente.sw@gmail.com</a></p>
+                <p class="footer-address">Heroica Guaymas, Sonora, México.</p>
+                <p class="footer-copyright"><em>© 2026 Imprudente Dept. Creativo</em></p>
             </div>
         </div>
     </footer>

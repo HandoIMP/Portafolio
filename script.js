@@ -9,7 +9,45 @@
    GLOBAL STATE
    ========================================================================== */
 let projects = [];
+// Global Intersection Observer for subtle scroll reveals
+window.appScrollObserver = (typeof window !== 'undefined' && 'IntersectionObserver' in window) 
+    ? new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { root: null, rootMargin: '50px 0px 50px 0px', threshold: 0 }) 
+    : null;
 
+window.observeElement = function(selectorOrElement) {
+    if (!selectorOrElement) return;
+    
+    const elements = typeof selectorOrElement === 'string' 
+        ? Array.from(document.querySelectorAll(selectorOrElement))
+        : (selectorOrElement instanceof HTMLElement ? [selectorOrElement] : []);
+
+    elements.forEach(el => {
+        if (window.appScrollObserver) {
+            el.classList.add('reveal-on-scroll');
+            window.appScrollObserver.observe(el);
+            
+            // Safety fallback: if IntersectionObserver fails to fire for elements already in viewport
+            setTimeout(() => {
+                if (!el.classList.contains('visible')) {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top > 0 && rect.top < window.innerHeight + 100) {
+                        el.classList.add('visible');
+                    }
+                }
+            }, 300);
+        } else {
+            // If no observer supported, just make it visible
+            el.classList.add('reveal-on-scroll', 'visible');
+        }
+    });
+};
 /* ==========================================================================
    UTIL: Markdown -> Projects parser
    - Espera bloques que comienzan con "## Título"
@@ -111,7 +149,10 @@ function renderProjectList(projectsArray) {
                class="project-thumb"
                loading="lazy">
         </div>
-        <span class="project-text">${escapeHtml(project.title || '')} — ${escapeHtml(project.category || '')}</span>
+        <div class="project-text">
+            <div class="project-title-text">${escapeHtml(project.title || '')}</div>
+            <div class="project-category-text">${escapeHtml(project.category || '')}</div>
+        </div>
         <svg class="project-link-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path d="M5 12h14M13 5l7 7-7 7"
                 stroke="currentColor"
@@ -124,6 +165,9 @@ function renderProjectList(projectsArray) {
     `;
 
         list.appendChild(li);
+        if (typeof window.observeElement === 'function') {
+            window.observeElement(li);
+        }
     });
 
     // Después de insertar los elementos en el DOM, actualizamos thumbs y slugs
@@ -415,15 +459,23 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', updateThemeIndicatorIconsAndHeader);
 
     // Hero noise canvas
-    const NOISE_RES = 720;
     if (heroNoiseCanvas && heroNoiseCanvas.getContext) {
-        heroNoiseCanvas.width = NOISE_RES;
-        heroNoiseCanvas.height = NOISE_RES;
         heroNoiseCanvas.style.width = '100%';
         heroNoiseCanvas.style.height = '100%';
+        
+        function resizeNoiseCanvas() {
+            heroNoiseCanvas.width = heroNoiseCanvas.offsetWidth || window.innerWidth;
+            heroNoiseCanvas.height = heroNoiseCanvas.offsetHeight || window.innerHeight;
+        }
+        window.addEventListener('resize', resizeNoiseCanvas);
+        resizeNoiseCanvas();
+
         const noiseCtx = heroNoiseCanvas.getContext('2d');
         function generateHeroNoise() {
-            const imageData = noiseCtx.createImageData(NOISE_RES, NOISE_RES);
+            const w = heroNoiseCanvas.width;
+            const h = heroNoiseCanvas.height;
+            if (w === 0 || h === 0) return;
+            const imageData = noiseCtx.createImageData(w, h);
             const data = imageData.data;
             for (let i = 0; i < data.length; i += 4) {
                 const v = Math.floor(Math.random() * 255);
@@ -615,17 +667,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Reveal on scroll
-    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
-    const scrollObserver = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                obs.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-    document.querySelectorAll('.reveal-on-scroll').forEach(el => scrollObserver.observe(el));
+    // Observe static elements
+    if (typeof window.observeElement === 'function') {
+        window.observeElement('.reveal-on-scroll, .footer-col, .contact-form, .detail-info-item, .detail-credits, .detail-description');
+    }
 
     // Accessibility: keyboard detection
     (function detectKeyboard() {

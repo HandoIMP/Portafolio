@@ -162,9 +162,9 @@ body {
     height: 100%;
     pointer-events: none;
     z-index: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='4.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
     background-size: cover;
-    opacity: 0.06;
+    opacity: 0.03;
 }
 
 /* Custom Scrollbar */
@@ -213,7 +213,7 @@ body {
     width: 100%;
     height: 100vh;
     z-index: 0;
-    opacity: 0.06;
+    opacity: 0.03;
     pointer-events: none;
     image-rendering: pixelated;
 }
@@ -254,9 +254,15 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    padding: 1.25rem 3rem 1.5rem;
+    padding: 1.25rem calc((100% - 1600px) / 2 + 2.5rem) 1.5rem;
     pointer-events: none;
     border-top: 1px solid var(--card-border);
+}
+
+@media (max-width: 1600px) {
+    .hero-corner-container {
+        padding: 1.25rem 2.5rem 1.5rem;
+    }
 }
 
 @media (max-width: 768px) {
@@ -387,7 +393,12 @@ body {
    ========================================================================== */
 .hero-assets {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1740px;
+    height: 100%;
     pointer-events: none;
     z-index: 1;
 }
@@ -614,7 +625,7 @@ body {
 .info-cards-wrap {
     display: grid;
     gap: 2.5rem;
-    max-width: 1100px;
+    max-width: 1600px;
     margin: 0 auto;
     width: 100%;
 }
@@ -784,7 +795,7 @@ body.day-mode .info-card .info-icon {
 }
 
 /* 7) Hover: revelar thumbnail (grid empuja título naturalmente) */
-@media (hover: hover) and (pointer: fine) {
+@media (hover: hover) and (pointer: fine) and (min-width: 901px) {
 
     .project-item:hover .project-thumb-wrap,
     .project-item:focus-within .project-thumb-wrap {
@@ -836,79 +847,164 @@ body.day-mode .info-card .info-icon {
    ========================================================================== */
 .main-footer {
     border-top: 1px solid var(--card-border);
-    padding: 4rem 0 3rem;
+    padding: 6rem 0 4rem;
     transition: var(--theme-transition);
     position: relative;
     z-index: 2;
 }
 
-.footer-grid {
+.footer-grid-3col {
     display: grid;
-    grid-template-columns: 1.6fr 1fr;
-    gap: 2.5rem;
-    align-items: flex-start;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 3.5rem;
+    align-items: start;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
 }
 
-.footer-copy {
-    display: grid;
+.footer-col {
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
 }
 
-.footer-overline {
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    font-size: 0.8rem;
-    color: var(--text-muted);
+.footer-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: var(--text-color);
     margin: 0;
 }
 
-.footer-email {
-    color: var(--text-color);
-    font-size: clamp(1.3rem, 2vw, 1.55rem);
-    text-decoration: none;
+.footer-cta-phrase {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.footer-cta-btn {
+    align-self: flex-start;
+    font-size: 0.72rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+    margin-top: 0.5rem;
+}
+
+.footer-subtitle {
+    font-size: 0.92rem;
     font-weight: 700;
-}
-
-.footer-text {
-    margin: 0;
     color: var(--text-muted);
-    line-height: 1.7;
+    margin: 0;
 }
 
-.footer-actions-col {
-    display: grid;
-    gap: 1.5rem;
-    justify-items: end;
+.footer-links-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
-.footer-links {
-    display: grid;
-    gap: 0.85rem;
-    text-align: right;
+/* ==========================================================================
+   Soft Scroll Animation
+   ========================================================================== */
+.reveal-on-scroll,
+.project-item.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out, background 0.8s, color 0.5s, border-color 0.5s !important;
+    will-change: opacity, transform;
 }
 
-.footer-links a {
-    color: var(--text-color);
+.reveal-on-scroll.visible,
+.project-item.reveal-on-scroll.visible {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+
+.footer-link-item {
+    color: var(--text-muted);
     text-decoration: none;
+    font-size: 0.92rem;
     transition: color 0.2s ease;
+    align-self: flex-start;
 }
 
-.footer-links a:hover {
+.footer-link-item:hover {
     color: var(--accent-color);
 }
 
+.footer-address {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.footer-email-lead {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.footer-email-lead a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: normal;
+    transition: color 0.2s ease;
+}
+
+.footer-email-lead a:hover {
+    color: var(--accent-color);
+}
+
+.footer-logo-container {
+    max-width: 1600px;
+    margin: 0 auto 3.5rem auto;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+}
+
+.footer-logo {
+    width: 98%;
+    margin: 0 auto;
+    height: auto;
+    display: block;
+    filter: var(--logo-filter);
+    transition: var(--theme-transition);
+}
+
+.footer-copyright {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    margin: 0;
+    font-style: italic;
+}
+
 @media (max-width: 900px) {
-    .footer-grid {
+    .footer-grid-3col,
+    .footer-logo-container {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: 3rem;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        text-align: center;
     }
 
-    .footer-actions-col {
-        justify-items: start;
+    .footer-col {
+        align-items: center;
     }
 
-    .footer-links {
-        text-align: left;
+    .footer-links-list {
+        align-items: center;
+    }
+
+    .footer-link-item,
+    .footer-cta-btn {
+        align-self: center;
     }
 }
 
@@ -947,9 +1043,8 @@ body.day-mode .info-card .info-icon {
     top: 0;
     left: 0;
     width: 100%;
-    padding: 1.5rem 3rem;
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
+    /* Mantiene los elementos contenidos dentro del max-width de 1600px alineados con padding dinámico */
+    padding: 1.5rem calc((100% - 1600px) / 2 + 2.5rem);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -959,6 +1054,12 @@ body.day-mode .info-card .info-icon {
     border-bottom: 1px solid var(--card-border);
     transition: background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1), var(--theme-transition);
     background-color: var(--nav-bg);
+}
+
+@media (max-width: 1600px) {
+    .top-nav {
+        padding: 1.5rem 2.5rem;
+    }
 }
 
 @media (max-width: 768px) {
@@ -1244,16 +1345,17 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
 }
 
 
-/* ---------- Project list container (asegúrate que no haya un punto suelto antes del selector) ---------- */
 .project-list {
     width: 100%;
-    max-width: 1100px;
+    max-width: 1600px;
     margin: 0 auto;
     /* si quieres que el título esté en el borde izquierdo */
     padding: 0;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     list-style: none;
+    position: relative;
+    z-index: 10;
 }
 
 /* ---------- Cada item y enlace: título a la izquierda, icono a la derecha ---------- */
@@ -1267,7 +1369,7 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
     justify-content: flex-start;
     /* título a la izquierda; icono se empuja con margin-left:auto */
     gap: 1rem;
-    height: 140px;
+    height: 280px;
     overflow: hidden;
     padding: 0.75rem 0;
     /* espacio vertical; ajusta si lo deseas */
@@ -1279,11 +1381,10 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
 /* Thumb wrapper: reservado el espacio pero oculto visualmente hasta hover */
 .project-thumb-wrap {
     position: absolute;
-    left: 0;
+    left: 1rem;
     top: 0.75rem;
     height: calc(100% - 1.5rem);
-    width: 1px;
-    /* inicializado en 1px según especificación */
+    width: var(--thumb-w, 200px);
     flex-shrink: 0;
     overflow: hidden;
     display: flex;
@@ -1291,10 +1392,11 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
     justify-content: left;
     background: transparent;
     border-radius: 16px;
-    transition: width .75s cubic-bezier(0.25, 1, 0.5, 1), transform .75s cubic-bezier(0.25, 1, 0.5, 1), opacity .75s ease;
-    transform: translateX(-40px);
-    /* ligeramente fuera al inicio */
+    transition: clip-path .4s cubic-bezier(0.25, 1, 0.5, 1), transform .4s cubic-bezier(0.25, 1, 0.5, 1), opacity .4s ease;
+    transform: translateX(0);
     opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    will-change: transform, clip-path, opacity;
 }
 
 /* Imagen: mantener proporción original, centrada dentro del wrapper */
@@ -1306,15 +1408,31 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
     border-radius: 16px;
 }
 
-/* Texto del proyecto: pegado al borde izquierdo del área disponible */
 .project-text {
-    flex: 1 1 auto;
-    font-size: clamp(1.15rem, 1.5vw, 1.5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transform: translateX(0);
+    transition: transform .4s cubic-bezier(0.25, 1, 0.5, 1);
+    text-align: left;
+    overflow: hidden;
+    will-change: transform;
+}
+
+.project-title-text {
+    font-size: clamp(2rem, 3.5vw, 4rem);
     font-weight: 600;
     color: var(--text-color);
-    margin-left: 0;
-    transition: margin-left .75s cubic-bezier(0.25, 1, 0.5, 1);
-    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.project-category-text {
+    font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 400;
+    margin-top: 0.25rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1330,21 +1448,20 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
     transition: transform .4s ease, opacity .4s ease;
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (hover: hover) and (pointer: fine) and (min-width: 901px) {
 
     /* Hover: mostrar thumbnail y empujar título */
     .project-item:hover .project-thumb-wrap,
     .project-item:focus-within .project-thumb-wrap {
-        width: var(--thumb-w);
-        /* se expande al ancho real */
+        clip-path: inset(0 0 0 0);
         opacity: 1;
         transform: translateX(0);
     }
 
-    /* El título se desplaza empujado por margin-left mientras el enlace no cambia su padding */
+    /* El título se desplaza empujado por transform */
     .project-item:hover .project-text,
     .project-item:focus-within .project-text {
-        margin-left: calc(var(--thumb-w) + var(--thumb-gap));
+        transform: translateX(calc(var(--thumb-w) + var(--thumb-gap) + 1rem));
     }
 }
 
@@ -1358,6 +1475,7 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
         position: relative;
         border-radius: 24px;
         overflow: hidden;
+        background-color: #000;
     }
 
     .project-thumb-wrap {
@@ -1370,6 +1488,7 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
         opacity: 1;
         border-radius: 0;
         z-index: 1;
+        clip-path: none;
     }
 
     .project-thumb {
@@ -1377,7 +1496,8 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
         height: 100%;
         object-fit: cover;
         border-radius: 0;
-        transition: filter 0.3s ease;
+        transition: opacity 0.6s ease, transform 0.6s ease;
+        transform: scale(1);
     }
 
     .project-text {
@@ -1389,7 +1509,7 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
         white-space: normal;
         text-align: center;
         opacity: 0;
-        transition: opacity 0.3s ease;
+        transition: opacity 0.6s ease;
         text-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
         z-index: 2;
         pointer-events: none;
@@ -1400,10 +1520,14 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
         display: none;
     }
 
+    .project-link:hover .project-thumb,
     .project-link.active-tap .project-thumb {
-        filter: blur(8px) brightness(0.6);
+        opacity: 0.25;
+        filter: none;
+        transform: scale(1.05);
     }
 
+    .project-link:hover .project-text,
     .project-link.active-tap .project-text {
         opacity: 1;
     }
@@ -1840,13 +1964,15 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
 /* Layout principal: aside fijo + contenido fluido */
 .project-detail-layout {
     display: grid;
-    grid-template-columns: 552px 1fr;
-    /* aside fijo 15% más ancho que antes */
-    gap: 2rem;
+    grid-template-columns: 420px 1fr;
+    /* aside fijo más estrecho para priorizar la galería */
+    gap: 4rem;
     align-items: start;
     padding-top: 140px;
     position: relative;
     z-index: 2;
+    max-width: 1600px;
+    margin: 0 auto;
 }
 
 /* Aside fijo (sticky) */
@@ -1879,7 +2005,7 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
 .detail-gallery {
     display: flex;
     flex-direction: column;
-    gap: 4rem;
+    gap: 1.5rem;
 }
 
 .gallery-item {
@@ -1889,15 +2015,15 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
 }
 
 .gallery-item.landscape {
-    max-width: 1400px;
+    max-width: 100%;
 }
 
 .gallery-item.portrait {
-    max-width: 820px;
+    max-width: 950px;
 }
 
 .gallery-item.square {
-    max-width: 1000px;
+    max-width: 1200px;
 }
 
 .gallery-item img {
@@ -2254,7 +2380,6 @@ input.contact-submit {
 
     .gallery-item {
         margin-bottom: 18px;
-    }
 }
 
 /* End of file */
