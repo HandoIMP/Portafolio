@@ -464,8 +464,8 @@ body {
 }
 
 .hero-asset.asset-silence {
-    width: clamp(140px, 21vw, 238px);
-    height: clamp(140px, 21vw, 238px);
+    width: clamp(100px, 15vw, 170px);
+    height: clamp(100px, 15vw, 170px);
 }
 
 /* Floating animations on the images inside the draggable wrappers (with unique default angles) */
@@ -496,32 +496,32 @@ body {
 /* Asymmetric Positioning around the center hero content (with Llavero centered above the logo) */
 .hero-asset.asset-silence {
     top: 15%;
-    left: 3%;
+    left: 10%;
 }
 
 .hero-asset.asset-camera {
-    top: 50%;
-    left: 8%;
+    top: 44%;
+    left: 3%;
 }
 
 .hero-asset.asset-pelican {
     bottom: 8%;
-    left: 2%;
+    left: 8%;
 }
 
 .hero-asset.asset-shirt {
-    top: 12%;
+    top: 19%;
     right: 4%;
 }
 
 .hero-asset.asset-palette {
     bottom: 12%;
-    right: 3%;
+    right: 20%;
 }
 
 /* Keychain (poster) centered above the logo */
 .hero-asset.asset-poster {
-    top: 8%;
+    top: 12%;
     left: calc(50% - clamp(90px, 13.5vw, 153px));
 }
 
@@ -984,6 +984,7 @@ body.day-mode .info-card .info-icon {
 }
 
 @media (max-width: 900px) {
+
     .footer-grid-3col,
     .footer-logo-container {
         grid-template-columns: 1fr;
