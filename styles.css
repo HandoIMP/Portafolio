@@ -470,27 +470,27 @@ body {
 
 /* Floating animations on the images inside the draggable wrappers (with unique default angles) */
 .hero-asset.asset-silence .asset-image {
-    animation: float-silence 6s ease-in-out infinite;
+    animation: float-silence 6s steps(6, end) infinite;
 }
 
 .hero-asset.asset-camera .asset-image {
-    animation: float-camera 5s ease-in-out infinite 0.5s;
+    animation: float-camera 5s steps(6, end) infinite 0.5s;
 }
 
 .hero-asset.asset-pelican .asset-image {
-    animation: float-pelican 7s ease-in-out infinite 1s;
+    animation: float-pelican 7s steps(6, end) infinite 1s;
 }
 
 .hero-asset.asset-shirt .asset-image {
-    animation: float-shirt 5.5s ease-in-out infinite 0.2s;
+    animation: float-shirt 5.5s steps(6, end) infinite 0.2s;
 }
 
 .hero-asset.asset-palette .asset-image {
-    animation: float-palette 6.5s ease-in-out infinite 0.8s;
+    animation: float-palette 6.5s steps(6, end) infinite 0.8s;
 }
 
 .hero-asset.asset-poster .asset-image {
-    animation: float-poster 7.5s ease-in-out infinite 1.5s;
+    animation: float-poster 7.5s steps(6, end) infinite 1.5s;
 }
 
 /* Asymmetric Positioning around the center hero content (with Llavero centered above the logo) */
@@ -531,9 +531,9 @@ body {
 }
 
 .hero-asset.is-dragging .asset-image {
-    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.22));
-    transform: scale(1.08);
     animation-play-state: paused;
+    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.22));
+    transform: scale(1.15) !important;
 }
 
 .hero-asset.is-returning {
@@ -545,11 +545,11 @@ body {
 
     0%,
     100% {
-        transform: translateY(0px) rotate(-12deg);
+        transform: translateY(0px) rotate(-26deg) scale(1);
     }
 
     50% {
-        transform: translateY(-10px) rotate(-10.5deg);
+        transform: translateY(-12px) rotate(-12deg) scale(1.06);
     }
 }
 
@@ -557,11 +557,11 @@ body {
 
     0%,
     100% {
-        transform: translateY(0px) rotate(15deg);
+        transform: translateY(0px) rotate(35deg) scale(1);
     }
 
     50% {
-        transform: translateY(-7px) rotate(14deg);
+        transform: translateY(-9px) rotate(15deg) scale(1.05);
     }
 }
 
@@ -569,11 +569,11 @@ body {
 
     0%,
     100% {
-        transform: translateY(0px) rotate(-8deg);
+        transform: translateY(0px) rotate(-22deg) scale(1);
     }
 
     50% {
-        transform: translateY(-12px) rotate(-6.5deg);
+        transform: translateY(-14px) rotate(-8deg) scale(1.07);
     }
 }
 
@@ -581,11 +581,11 @@ body {
 
     0%,
     100% {
-        transform: translateY(0px) rotate(10deg);
+        transform: translateY(0px) rotate(26deg) scale(1);
     }
 
     50% {
-        transform: translateY(-8px) rotate(8.5deg);
+        transform: translateY(-10px) rotate(10deg) scale(1.06);
     }
 }
 
@@ -593,11 +593,11 @@ body {
 
     0%,
     100% {
-        transform: translateY(0px) rotate(-18deg);
+        transform: translateY(0px) rotate(-35deg) scale(1);
     }
 
     50% {
-        transform: translateY(-9px) rotate(-16.5deg);
+        transform: translateY(-11px) rotate(-15deg) scale(1.05);
     }
 }
 
@@ -605,11 +605,11 @@ body {
 
     0%,
     100% {
-        transform: translateY(0px) rotate(6deg);
+        transform: translateY(0px) rotate(20deg) scale(1);
     }
 
     50% {
-        transform: translateY(-11px) rotate(7.5deg);
+        transform: translateY(-13px) rotate(5deg) scale(1.08);
     }
 }
 
@@ -651,13 +651,13 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 1.5rem;
+    gap: 0;
     min-height: 380px;
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
 }
 
 .info-card h3 {
-    margin: auto 0 0 0;
+    margin: auto 0 0.5rem 0;
     font-size: clamp(1.25rem, 1.6vw, 1.5rem);
 }
 
@@ -668,20 +668,20 @@ body {
 }
 
 .info-card .info-icon {
-    width: 52px;
-    height: 52px;
+    width: 104px;
+    height: 104px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 18px;
+    border-radius: 36px;
     background: rgba(255, 255, 255, 0.12);
     color: var(--accent-color);
     font-size: 1.6rem;
 }
 
 .info-card .info-icon img {
-    width: 32px;
-    height: 32px;
+    width: 64px;
+    height: 64px;
     filter: var(--logo-filter);
 }
 
@@ -707,7 +707,7 @@ body.day-mode .info-card .info-icon {
     padding-right: 1.5rem;
     list-style: none;
     display: grid;
-    gap: 1rem;
+    gap: 2.5rem;
 }
 
 .project-item {
@@ -781,7 +781,6 @@ body.day-mode .info-card .info-icon {
     color: var(--text-color);
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
     transition: transform .45s cubic-bezier(.16, 1, .3, 1);
 }
 
@@ -1356,6 +1355,9 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
     list-style: none;
     position: relative;
     z-index: 10;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
 }
 
 /* ---------- Cada item y enlace: título a la izquierda, icono a la derecha ---------- */
@@ -1376,6 +1378,9 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
     text-decoration: none;
     padding-left: 0;
     position: relative;
+    mask-image: linear-gradient(to right, #000 100%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, #000 100%, transparent 100%);
+    transition: mask-image .4s ease, -webkit-mask-image .4s ease;
 }
 
 /* Thumb wrapper: reservado el espacio pero oculto visualmente hasta hover */
@@ -1417,6 +1422,8 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
     text-align: left;
     overflow: hidden;
     will-change: transform;
+    flex: 1;
+    min-width: 0;
 }
 
 .project-title-text {
@@ -1425,14 +1432,17 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
     color: var(--text-color);
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
+    line-height: 1.15;
+    padding-bottom: 0.05em;
+    -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+    mask-image: linear-gradient(to right, black 85%, transparent 100%);
 }
 
 .project-category-text {
-    font-size: clamp(0.9rem, 1.2vw, 1.2rem);
-    color: rgba(255, 255, 255, 0.6);
+    font-size: clamp(0.9rem, 1vw, 1.05rem);
+    color: var(--text-muted);
     font-weight: 400;
-    margin-top: 0.25rem;
+    margin-top: -0.25rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1463,10 +1473,19 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
     .project-item:focus-within .project-text {
         transform: translateX(calc(var(--thumb-w) + var(--thumb-gap) + 1rem));
     }
+
+    .project-item:hover .project-link,
+    .project-item:focus-within .project-link {
+        mask-image: linear-gradient(to right, #000 80%, transparent 97%);
+        -webkit-mask-image: linear-gradient(to right, #000 80%, transparent 97%);
+    }
 }
 
-/* Responsive: en pantallas pequeñas, miniatura arriba y título debajo */
 @media (max-width: 900px) {
+    .project-list {
+        grid-template-columns: 1fr;
+    }
+
     .project-link {
         display: block;
         height: 250px;
@@ -1476,6 +1495,8 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
         border-radius: 24px;
         overflow: hidden;
         background-color: #000;
+        mask-image: none !important;
+        -webkit-mask-image: none !important;
     }
 
     .project-thumb-wrap {
@@ -1531,6 +1552,14 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
     .project-link.active-tap .project-text {
         opacity: 1;
     }
+
+    body.day-mode .project-link {
+        background-color: #ffffff;
+    }
+
+    body.day-mode .project-text {
+        text-shadow: 0 4px 12px rgba(255, 255, 255, 0.9);
+    }
 }
 
 /* ==========================================================================
@@ -1575,14 +1604,14 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
 }
 
 .detail-content {
-    padding: 4rem 3rem;
+    padding: 4rem 0;
     max-width: 1400px;
     margin: 0 auto;
 }
 
 @media (max-width: 768px) {
     .detail-content {
-        padding: 2rem 1.5rem;
+        padding: 2rem 0;
     }
 }
 
@@ -2005,7 +2034,7 @@ body:not(.day-mode) .theme-switch-pill .moon-icon {
 .detail-gallery {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0;
 }
 
 .gallery-item {
@@ -2380,6 +2409,7 @@ input.contact-submit {
 
     .gallery-item {
         margin-bottom: 18px;
+    }
 }
 
 /* End of file */

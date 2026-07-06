@@ -6,7 +6,7 @@
         opacity: 0;
         transform-origin: center;
         transform-box: fill-box;
-        animation: erraticFadeIn 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        animation: erraticFadeIn 1.2s steps(8, end) forwards;
     }
     
     .l-0 { animation-delay: 0.1s; }
@@ -46,7 +46,7 @@
         transform: translateY(50px);
         transform-origin: center;
         transform-box: fill-box;
-        animation: ovalAppear 0.8s cubic-bezier(0.25, 1, 0.5, 1) 1.8s forwards;
+        animation: ovalAppear 0.8s steps(5, end) 1.8s forwards;
     }
 
     @keyframes ovalAppear {
@@ -63,7 +63,7 @@
     .scene {
         transform-origin: center;
         transform-box: fill-box;
-        animation: sceneBounce 0.8s cubic-bezier(0.25, 1, 0.5, 1) 2.4s forwards;
+        animation: sceneBounce 0.8s steps(5, end) 2.4s forwards;
     }
 
     @keyframes sceneBounce {

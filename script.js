@@ -134,7 +134,23 @@ function renderProjectList(projectsArray) {
         return;
     }
 
-    projectsArray.forEach(project => {
+    let itemsToRender = projectsArray;
+
+    // Excluir el proyecto actual si estamos en la vista de detalle
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentProjectId = urlParams.get('id');
+    if (currentProjectId) {
+        itemsToRender = itemsToRender.filter(p => (p.id || '').toLowerCase() !== currentProjectId.toLowerCase());
+    }
+
+    if (list.hasAttribute('data-limit')) {
+        const limit = parseInt(list.getAttribute('data-limit'), 10);
+        if (!isNaN(limit) && limit > 0) {
+            itemsToRender = [...itemsToRender].sort(() => 0.5 - Math.random()).slice(0, limit);
+        }
+    }
+
+    itemsToRender.forEach(project => {
         const li = document.createElement('li');
         li.className = 'project-item';
 
@@ -153,14 +169,6 @@ function renderProjectList(projectsArray) {
             <div class="project-title-text">${escapeHtml(project.title || '')}</div>
             <div class="project-category-text">${escapeHtml(project.category || '')}</div>
         </div>
-        <svg class="project-link-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="M5 12h14M13 5l7 7-7 7"
-                stroke="currentColor"
-                stroke-width="2"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round" />
-        </svg>
       </a>
     `;
 
@@ -404,6 +412,9 @@ function closeProjectDetail() {
    - Mantengo tu lógica original pero asegurando que no haya duplicados
    ========================================================================== */
 document.addEventListener('DOMContentLoaded', () => {
+    // Run entrance after a short delay to ensure positioning settles
+    setTimeout(playEntranceAnimation, 100);
+
     // Cached DOM
     const body = document.body;
     const themeSwitchBtn = document.getElementById('theme-switch-pill');
@@ -471,38 +482,52 @@ document.addEventListener('DOMContentLoaded', () => {
         resizeNoiseCanvas();
 
         const noiseCtx = heroNoiseCanvas.getContext('2d');
-        function generateHeroNoise() {
-            const w = heroNoiseCanvas.width;
-            const h = heroNoiseCanvas.height;
-            if (w === 0 || h === 0) return;
-            const imageData = noiseCtx.createImageData(w, h);
-            const data = imageData.data;
+        const patternSize = 256;
+        const patterns = [];
+        for (let p = 0; p < 3; p++) {
+            const pCanvas = document.createElement('canvas');
+            pCanvas.width = patternSize;
+            pCanvas.height = patternSize;
+            const pCtx = pCanvas.getContext('2d');
+            const imgData = pCtx.createImageData(patternSize, patternSize);
+            const data = imgData.data;
             for (let i = 0; i < data.length; i += 4) {
                 const v = Math.floor(Math.random() * 255);
                 data[i] = v; data[i + 1] = v; data[i + 2] = v; data[i + 3] = 255;
             }
-            noiseCtx.putImageData(imageData, 0, 0);
+            pCtx.putImageData(imgData, 0, 0);
+            patterns.push(pCanvas);
         }
-        setInterval(generateHeroNoise, 80);
-        generateHeroNoise();
+
+        let noiseIndex = 0;
+        let lastNoiseTime = 0;
+        function generateHeroNoise(time) {
+            if (time - lastNoiseTime > (1000 / 24)) {
+                const w = heroNoiseCanvas.width;
+                const h = heroNoiseCanvas.height;
+                if (w !== 0 && h !== 0) {
+                    const pat = noiseCtx.createPattern(patterns[noiseIndex], 'repeat');
+                    noiseCtx.fillStyle = pat;
+                    noiseCtx.fillRect(0, 0, w, h);
+                    noiseIndex = (noiseIndex + 1) % patterns.length;
+                }
+                lastNoiseTime = time;
+            }
+            requestAnimationFrame(generateHeroNoise);
+        }
+        requestAnimationFrame(generateHeroNoise);
     }
 
     // Hero gradient animation
     let targetX = 50, targetY = 50, currentX = 50, currentY = 50, animFrameId = null;
-    if (heroSection) {
-        heroSection.addEventListener('mousemove', (e) => {
-            const rect = heroSection.getBoundingClientRect();
-            targetX = ((e.clientX - rect.left) / rect.width) * 100;
-            targetY = ((e.clientY - rect.top) / rect.height) * 100;
-        });
-        heroSection.addEventListener('mouseleave', () => { targetX = 50; targetY = 50; });
-    }
+    window.addEventListener('mousemove', (e) => {
+        targetX = (e.clientX / window.innerWidth) * 100;
+        targetY = (e.clientY / window.innerHeight) * 100;
+    });
+    document.addEventListener('mouseleave', () => { targetX = 50; targetY = 50; });
+
     function applyHeroGradient() {
-        const computed = getComputedStyle(document.body);
-        const g1 = computed.getPropertyValue('--gradient-bg-1').trim() || getComputedStyle(document.documentElement).getPropertyValue('--gradient-bg-1').trim() || '#0214B6';
-        const g2 = computed.getPropertyValue('--gradient-bg-2').trim() || getComputedStyle(document.documentElement).getPropertyValue('--gradient-bg-2').trim() || '#011173';
-        const g3 = computed.getPropertyValue('--gradient-bg-3').trim() || getComputedStyle(document.documentElement).getPropertyValue('--gradient-bg-3').trim() || '#000119';
-        if (heroBg) heroBg.style.background = `radial-gradient(circle at ${currentX}% ${currentY}%, ${g1}, ${g2}, ${g3})`;
+        if (heroBg) heroBg.style.background = `radial-gradient(circle at ${currentX}% ${currentY}%, var(--gradient-bg-1), var(--gradient-bg-2), var(--gradient-bg-3))`;
     }
     function animateHeroGradient() {
         currentX += (targetX - currentX) * 0.07;
@@ -520,6 +545,16 @@ document.addEventListener('DOMContentLoaded', () => {
         asset.addEventListener('pointerup', handleAssetPointerUp);
         asset.addEventListener('pointercancel', handleAssetPointerUp);
     });
+
+    // Resting angles matching default angles in CSS
+    const restingAngles = {
+        silence: -26,
+        camera: 35,
+        pelican: -22,
+        shirt: 26,
+        palette: -35,
+        poster: 20
+    };
 
     // Play entrance animation from center with a spring effect
     function playEntranceAnimation() {
@@ -552,8 +587,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         heroAssets.forEach((asset, idx) => {
             const delay = idx * 60;
+            const name = asset.dataset.asset;
+            const angle = restingAngles[name] || 0;
             asset.style.transition = `transform 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}ms, opacity 1.2s ease ${delay}ms`;
-            asset.style.transform = 'translate(0px, 0px) scale(1)';
+            asset.style.transform = `translate(0px, 0px) scale(1) rotate(${angle}deg)`;
             asset.style.opacity = '1';
 
             setTimeout(() => {
@@ -562,9 +599,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 1500 + delay);
         });
     }
-
-    // Run entrance after a short delay to ensure positioning settles
-    setTimeout(playEntranceAnimation, 100);
 
     function handleAssetPointerDown(e) {
         const asset = e.currentTarget;
@@ -596,8 +630,10 @@ document.addEventListener('DOMContentLoaded', () => {
         asset.releasePointerCapture(e.pointerId);
         asset.classList.remove('is-dragging');
         asset.classList.add('is-returning');
-        asset.style.transform = 'translate(0, 0) rotate(0deg)';
-        asset.style.transition = 'transform 0.55s cubic-bezier(0.23, 1, 0.32, 1)';
+        const name = asset.dataset.asset;
+        const angle = restingAngles[name] || 0;
+        asset.style.transform = `translate(0, 0) rotate(${angle}deg)`;
+        asset.style.transition = 'transform 0.55s cubic-bezier(0.25, 1, 0.5, 1)';
         window.setTimeout(() => {
             asset.classList.remove('is-returning');
             asset.style.transition = '';
@@ -770,9 +806,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (list) list.innerHTML = `<li class="project-empty">Error cargando proyectos.</li>`;
         });
 
+    let scrollTicking = false;
     window.addEventListener('scroll', () => {
-        const trigger = 150; // píxeles de scroll antes de desvanecer
-        document.body.classList.toggle('scrolled', window.scrollY > trigger);
-    });
+        if (!scrollTicking) {
+            window.requestAnimationFrame(() => {
+                const trigger = 150; // píxeles de scroll antes de desvanecer
+                document.body.classList.toggle('scrolled', window.scrollY > trigger);
+                scrollTicking = false;
+            });
+            scrollTicking = true;
+        }
+    }, { passive: true });
 
 })();
