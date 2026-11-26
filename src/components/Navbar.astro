@@ -1,0 +1,115 @@
+---
+import { SITE_DEFAULTS } from '../lib/site-config';
+
+interface Props {
+  activeNav?: 'trabajo' | 'equipo' | 'servicios' | 'contacto' | 'none';
+}
+
+const { activeNav = 'none' } = Astro.props;
+const isHome = Astro.url.pathname === '/';
+
+const navLinks = [
+  { key: 'trabajo', label: 'Trabajo', href: isHome ? '#trabajo' : '/#trabajo' },
+  { key: 'equipo', label: 'Equipo', href: isHome ? '#equipo' : '/#equipo' },
+  { key: 'servicios', label: 'Servicios', href: isHome ? '#servicios' : '/#servicios' },
+] as const;
+---
+
+<header
+  class="pointer-events-none fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-5"
+  role="banner"
+>
+  <nav
+    aria-label="Navegación principal"
+    class="mx-auto flex max-w-7xl items-center justify-between gap-2"
+  >
+    <!-- Bloque izquierdo: logotipo flotante -->
+    <a
+      href="/"
+      class="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-ink/12 bg-canvas/85 px-3.5 py-2 text-sm font-medium tracking-tight text-ink backdrop-blur-md transition-colors hover:border-ink/30"
+    >
+      <img
+        src="/brand/logo-imp.svg"
+        alt=""
+        width="18"
+        height="18"
+        class="h-4.5 w-4.5 object-contain"
+      />
+      <span>{SITE_DEFAULTS.brandName}</span>
+    </a>
+
+    <!-- Bloque central: cápsula flotante con 3 botones -->
+    <div
+      class="pointer-events-auto inline-flex items-center gap-0.5 rounded-full border border-ink/12 bg-canvas/85 p-1 backdrop-blur-md sm:gap-1"
+      data-nav-capsule
+    >
+      {navLinks.map((item) => {
+        const isActive = activeNav === item.key;
+        return (
+          <a
+            href={item.href}
+            data-nav-item={item.key}
+            aria-current={isActive ? 'page' : undefined}
+            class:list={[
+              'rounded-full px-3 py-1.5 text-xs font-medium transition-colors sm:px-4 sm:text-sm',
+              isActive
+                ? 'bg-ink text-canvas'
+                : 'text-ink/75 hover:bg-ink/6 hover:text-ink',
+            ]}
+          >
+            {item.label}
+          </a>
+        );
+      })}
+    </div>
+
+    <!-- Bloque derecho: botón flotante de Contacto en color de acento -->
+    <a
+      href="/contacto"
+      class:list={[
+        'pointer-events-auto inline-flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-xs font-medium tracking-tight transition-colors sm:px-4 sm:text-sm',
+        activeNav === 'contacto'
+          ? 'border-accent-orange bg-accent-orange text-white'
+          : 'border-accent-blue bg-accent-blue text-white hover:border-accent-orange hover:bg-accent-orange',
+      ]}
+    >
+      <span>Contacto</span>
+      <span aria-hidden="true" class="hidden sm:inline">↗</span>
+    </a>
+  </nav>
+</header>
+
+{isHome && (
+  <script>
+    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-nav-item]'));
+    const sectionIds = ['trabajo', 'equipo', 'servicios'];
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => Boolean(el));
+
+    if (links.length > 0 && sections.length > 0 && 'IntersectionObserver' in window) {
+      const setActive = (key: string | null) => {
+        links.forEach((link) => {
+          const match = link.dataset.navItem === key;
+          link.classList.toggle('bg-ink', match);
+          link.classList.toggle('text-canvas', match);
+          link.classList.toggle('text-ink/75', !match);
+        });
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (visible?.target?.id) {
+            setActive(visible.target.id);
+          }
+        },
+        { rootMargin: '-30% 0px -45% 0px', threshold: [0.1, 0.35] }
+      );
+
+      sections.forEach((sec) => observer.observe(sec));
+    }
+  </script>
+)}

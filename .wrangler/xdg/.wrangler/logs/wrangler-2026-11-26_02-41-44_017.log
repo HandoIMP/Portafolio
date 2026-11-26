@@ -1,0 +1,40 @@
+
+--- 2026-11-26T02:41:44.544Z debug
+🪵  Writing logs to "C:\Users\Alejandro\Documents\07. Antigravity\01.Imprudente\.wrangler\xdg\.wrangler\logs\wrangler-2026-11-26_02-41-44_017.log"
+---
+
+--- 2026-11-26T02:41:44.543Z debug
+Metrics dispatcher: Dispatching disabled - would have sent {"deviceId":"f64c60c1-ad31-4f03-b002-8bc003790df3","event":"wrangler command started","timestamp":1795660904543,"properties":{"amplitude_session_id":1795660904534,"amplitude_event_id":0,"wranglerVersion":"4.60.0","wranglerMajorVersion":4,"wranglerMinorVersion":60,"wranglerPatchVersion":0,"osPlatform":"Windows","osVersion":"Windows 11 Home","nodeVersion":26,"packageManager":"npm","isFirstUsage":true,"configFileType":"toml","isCI":false,"isPagesCI":false,"isWorkersCI":false,"isInteractive":false,"hasAssets":true,"argsUsed":["local"],"argsCombination":"local","agent":null,"command":"wrangler d1 migrations apply","args":{}}}.
+---
+
+--- 2026-11-26T02:41:44.549Z debug
+.env file not found at "C:\Users\Alejandro\Documents\07. Antigravity\01.Imprudente\.env". Continuing... For more details, refer to https://developers.cloudflare.com/workers/wrangler/system-environment-variables/
+---
+
+--- 2026-11-26T02:41:44.550Z debug
+.env file not found at "C:\Users\Alejandro\Documents\07. Antigravity\01.Imprudente\.env.local". Continuing... For more details, refer to https://developers.cloudflare.com/workers/wrangler/system-environment-variables/
+---
+
+--- 2026-11-26T02:41:44.586Z log
+
+ ⛅️ wrangler 4.60.0
+───────────────────
+---
+
+--- 2026-11-26T02:41:44.587Z log
+Resource location: local 
+
+---
+
+--- 2026-11-26T02:41:44.588Z log
+Use --remote if you want to access the remote instance.
+
+---
+
+--- 2026-11-26T02:41:44.614Z log
+🌀 Executing on local database DB (00000000-0000-0000-0000-000000000000) from .wrangler\state\v3\d1:
+---
+
+--- 2026-11-26T02:41:44.614Z log
+🌀 To execute on your remote database, add a --remote flag to your wrangler command.
+---

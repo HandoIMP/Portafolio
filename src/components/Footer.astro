@@ -1,0 +1,120 @@
+---
+import { SITE_DEFAULTS } from '../lib/site-config';
+
+interface Props {
+  showCta?: boolean;
+}
+
+const { showCta = true } = Astro.props;
+---
+
+<footer class="mt-20 border-t border-ink/10 bg-canvas">
+  {showCta && (
+    <section class="mx-auto max-w-7xl px-4 pt-16 pb-12 sm:px-6 lg:pt-24">
+      <div class="relative overflow-hidden rounded-3xl border border-ink/12 bg-ink px-6 py-12 text-canvas sm:px-12 sm:py-16">
+        <div class="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+          <div class="max-w-2xl">
+            <span class="inline-block rounded-full bg-accent-green px-3 py-1 text-xs font-medium uppercase tracking-wider text-ink">
+              {SITE_DEFAULTS.tagline}
+            </span>
+            <h2 class="mt-5 text-3xl font-medium leading-[1.08] tracking-tight sm:text-5xl">
+              ¿Listo para dar forma a algo{' '}
+              <span class="font-serif italic font-normal text-accent-green">auténtico</span>?
+            </h2>
+            <p class="mt-4 max-w-xl text-base text-canvas/75 sm:text-lg">
+              Cuéntanos tu proyecto de logotipo, producción visual, fotografía o página web.
+            </p>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <a
+              href="/contacto"
+              class="inline-flex items-center gap-2 rounded-full bg-accent-orange px-6 py-3.5 text-sm font-medium text-white transition-transform hover:-translate-y-0.5"
+            >
+              <span>Iniciar conversación</span>
+              <span aria-hidden="true">→</span>
+            </a>
+            <a
+              href={SITE_DEFAULTS.whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-full border border-canvas/25 px-6 py-3.5 text-sm font-medium text-canvas transition-colors hover:border-canvas"
+            >
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6">
+    <div class="grid gap-10 border-b border-ink/10 pb-10 md:grid-cols-12">
+      <div class="md:col-span-5">
+        <a href="/" class="inline-flex items-center gap-3">
+          <img
+            src="/brand/imprudente-wordmark.svg"
+            alt={SITE_DEFAULTS.fullTitle}
+            class="h-7 w-auto"
+          />
+        </a>
+        <p class="mt-3 max-w-sm text-sm text-ink/65">
+          {SITE_DEFAULTS.tagline} — Diseño de logotipo, producción visual, fotografía y páginas web.
+        </p>
+      </div>
+
+      <div class="md:col-span-3">
+        <h3 class="text-xs font-medium uppercase tracking-wider text-ink/45">Explorar</h3>
+        <ul class="mt-3 space-y-2 text-sm">
+          <li><a href="/#trabajo" class="text-ink/80 hover:text-accent-blue">Trabajo</a></li>
+          <li><a href="/#equipo" class="text-ink/80 hover:text-accent-blue">Equipo</a></li>
+          <li><a href="/#servicios" class="text-ink/80 hover:text-accent-blue">Servicios</a></li>
+          <li><a href="/blog" class="text-ink/80 hover:text-accent-blue">Blog</a></li>
+          <li><a href="/contacto" class="text-ink/80 hover:text-accent-blue">Contacto</a></li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-4">
+        <h3 class="text-xs font-medium uppercase tracking-wider text-ink/45">Contacto directo</h3>
+        <ul class="mt-3 space-y-2 text-sm">
+          <li>
+            <a
+              href={`mailto:${SITE_DEFAULTS.email}`}
+              class="font-medium text-ink hover:text-accent-blue"
+            >
+              {SITE_DEFAULTS.email}
+            </a>
+          </li>
+          <li>
+            <a
+              href={SITE_DEFAULTS.whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-ink/80 hover:text-accent-blue"
+            >
+              WhatsApp · {SITE_DEFAULTS.whatsappDisplay}
+            </a>
+          </li>
+          <li>
+            <a
+              href={SITE_DEFAULTS.instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-ink/80 hover:text-accent-blue"
+            >
+              Instagram · {SITE_DEFAULTS.instagramHandle}
+            </a>
+          </li>
+          <li class="pt-1 text-xs text-ink/55">{SITE_DEFAULTS.location}</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flex flex-col items-start justify-between gap-3 pt-6 text-xs text-ink/55 sm:flex-row sm:items-center">
+      <p>{SITE_DEFAULTS.copyright}</p>
+      <div class="flex items-center gap-4">
+        <a href="/blog" class="hover:text-ink">Archivo editorial (Blog)</a>
+        <a href="/sitemap.xml" class="hover:text-ink">Sitemap</a>
+      </div>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,114 @@
+---
+import '../../styles/global.css';
+import { SITE_DEFAULTS } from '../../lib/site-config';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Iniciar sesión — {SITE_DEFAULTS.brandName}</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="/brand/logo-imp.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="/fonts/general-sans/GeneralSans-Variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+  </head>
+  <body class="min-h-screen bg-canvas text-ink font-sans antialiased">
+    <main class="mx-auto flex min-h-screen max-w-sm flex-col items-center justify-center px-4">
+      <div class="w-full rounded-3xl border border-ink/12 bg-white p-8">
+        <div class="text-center">
+          <img src="/brand/logo-imp.svg" alt="" class="mx-auto h-10 w-10" />
+          <h1 class="mt-4 text-2xl font-medium tracking-tight">{SITE_DEFAULTS.brandName}</h1>
+          <p class="mt-1 text-sm text-ink/60">Acceso al panel administrativo</p>
+        </div>
+
+        <form id="login-form" method="POST" action="/api/auth/login" class="mt-8 space-y-4">
+          <div>
+            <label for="email" class="block text-xs font-medium uppercase tracking-wider text-ink/70">
+              Correo electrónico
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              autocomplete="email"
+              class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm text-ink placeholder:text-ink/40 focus:border-accent-blue focus:outline-none"
+              placeholder="tu@correo.com"
+            />
+          </div>
+
+          <div>
+            <label for="password" class="block text-xs font-medium uppercase tracking-wider text-ink/70">
+              Contraseña
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              autocomplete="current-password"
+              class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm text-ink placeholder:text-ink/40 focus:border-accent-blue focus:outline-none"
+              placeholder="••••••••"
+            />
+          </div>
+
+          <p id="login-error" role="alert" class="hidden text-sm font-medium text-accent-orange"></p>
+
+          <button
+            id="login-submit"
+            type="submit"
+            class="w-full rounded-full bg-ink px-5 py-3 text-sm font-medium text-canvas transition-colors hover:bg-accent-blue disabled:opacity-50"
+          >
+            Iniciar sesión
+          </button>
+        </form>
+
+        <p class="mt-6 text-center text-xs text-ink/45">
+          <a href="/" class="hover:text-ink">← Volver al sitio público</a>
+        </p>
+      </div>
+    </main>
+
+    <script>
+      const form = document.getElementById('login-form') as HTMLFormElement | null;
+      const errorEl = document.getElementById('login-error');
+      const submitBtn = document.getElementById('login-submit') as HTMLButtonElement | null;
+
+      if (form && errorEl && submitBtn) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          submitBtn.disabled = true;
+          errorEl.classList.add('hidden');
+
+          try {
+            const res = await fetch(form.action, {
+              method: 'POST',
+              body: new FormData(form),
+            });
+
+            const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+            if (data.ok) {
+              window.location.href = '/admin';
+              return;
+            }
+
+            errorEl.textContent = data.error || 'Credenciales inválidas.';
+            errorEl.classList.remove('hidden');
+          } catch {
+            errorEl.textContent = 'Error de conexión. Intenta de nuevo.';
+            errorEl.classList.remove('hidden');
+          } finally {
+            submitBtn.disabled = false;
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

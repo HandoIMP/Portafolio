@@ -1,0 +1,208 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { getDb } from '../../../db';
+import { teamMembers, brands, services } from '../../../db/schema';
+import { asc } from 'drizzle-orm';
+
+const d1 = Astro.locals.runtime?.env?.DB;
+
+type Team = typeof teamMembers.$inferSelect;
+type Brand = typeof brands.$inferSelect;
+type Service = typeof services.$inferSelect;
+
+let team: Team[] = [];
+let brandList: Brand[] = [];
+let serviceList: Service[] = [];
+
+if (d1) {
+  const db = getDb(d1);
+  try {
+    [team, brandList, serviceList] = await Promise.all([
+      db.select().from(teamMembers).orderBy(asc(teamMembers.sortOrder)),
+      db.select().from(brands).orderBy(asc(brands.sortOrder)),
+      db.select().from(services).orderBy(asc(services.sortOrder)),
+    ]);
+  } catch { /* empty */ }
+}
+---
+
+<AdminLayout title="Equipo & Sitio" activeSection="sitio">
+  <div class="max-w-4xl space-y-12">
+
+    <!-- TEAM -->
+    <section>
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <h2 class="text-xl font-medium tracking-tight">Equipo</h2>
+        <button id="add-team" type="button"
+          class="rounded-full bg-ink px-4 py-2 text-xs font-medium text-canvas hover:bg-accent-blue">
+          + Agregar
+        </button>
+      </div>
+      <div id="team-list" class="mt-4 space-y-3">
+        {team.map((m) => (
+          <div class="team-card rounded-xl border border-ink/10 bg-white px-5 py-4" data-id={m.id}>
+            <div class="grid gap-3 sm:grid-cols-4">
+              <input name="name" value={m.name} placeholder="Nombre" class="rounded-lg border border-ink/15 bg-canvas px-3 py-2 text-sm" />
+              <input name="role" value={m.role} placeholder="Rol" class="rounded-lg border border-ink/15 bg-canvas px-3 py-2 text-sm" />
+              <input name="photoUrl" value={m.photoUrl} placeholder="URL foto" class="rounded-lg border border-ink/15 bg-canvas px-3 py-2 text-sm" />
+              <div class="flex gap-2">
+                <input name="sortOrder" type="number" value={m.sortOrder} class="w-16 rounded-lg border border-ink/15 bg-canvas px-2 py-2 text-sm" />
+                <input name="rotationDeg" type="number" value={m.rotationDeg} class="w-16 rounded-lg border border-ink/15 bg-canvas px-2 py-2 text-sm" title="Rotación°" />
+              </div>
+            </div>
+            <textarea name="bioShort" rows="2" placeholder="Bio corta" class="mt-2 w-full rounded-lg border border-ink/15 bg-canvas px-3 py-2 text-sm">{m.bioShort}</textarea>
+            <div class="mt-2 flex gap-2">
+              <button type="button" class="save-team rounded-full bg-ink/10 px-3 py-1.5 text-xs font-medium hover:bg-ink/20">Guardar</button>
+              <button type="button" class="del-team rounded-full px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50">Eliminar</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- BRANDS -->
+    <section>
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <h2 class="text-xl font-medium tracking-tight">Marcas</h2>
+        <button id="add-brand" type="button"
+          class="rounded-full bg-ink px-4 py-2 text-xs font-medium text-canvas hover:bg-accent-blue">
+          + Agregar
+        </button>
+      </div>
+      <div id="brand-list" class="mt-4 space-y-3">
+        {brandList.map((b) => (
+          <div class="brand-card flex items-center gap-3 rounded-xl border border-ink/10 bg-white px-5 py-3" data-id={b.id}>
+            <input name="name" value={b.name} placeholder="Nombre" class="flex-1 rounded-lg border border-ink/15 bg-canvas px-3 py-2 text-sm" />
+            <input name="logoSvgOrUrl" value={b.logoSvgOrUrl} placeholder="URL logo" class="flex-1 rounded-lg border border-ink/15 bg-canvas px-3 py-2 text-sm" />
+            <input name="sortOrder" type="number" value={b.sortOrder} class="w-16 rounded-lg border border-ink/15 bg-canvas px-2 py-2 text-sm" />
+            <button type="button" class="save-brand rounded-full bg-ink/10 px-3 py-1.5 text-xs font-medium hover:bg-ink/20">Guardar</button>
+            <button type="button" class="del-brand text-xs text-red-600 hover:underline">✕</button>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section>
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <h2 class="text-xl font-medium tracking-tight">Servicios</h2>
+        <button id="add-service" type="button"
+          class="rounded-full bg-ink px-4 py-2 text-xs font-medium text-canvas hover:bg-accent-blue">
+          + Agregar
+        </button>
+      </div>
+      <div id="service-list" class="mt-4 space-y-3">
+        {serviceList.map((s) => (
+          <div class="service-card rounded-xl border border-ink/10 bg-white px-5 py-4" data-id={s.id}>
+            <div class="grid gap-3 sm:grid-cols-3">
+              <input name="title" value={s.title} placeholder="Título" class="rounded-lg border border-ink/15 bg-canvas px-3 py-2 text-sm" />
+              <input name="previewMediaUrl" value={s.previewMediaUrl} placeholder="URL preview" class="rounded-lg border border-ink/15 bg-canvas px-3 py-2 text-sm" />
+              <input name="sortOrder" type="number" value={s.sortOrder} class="w-20 rounded-lg border border-ink/15 bg-canvas px-2 py-2 text-sm" />
+            </div>
+            <textarea name="description" rows="2" placeholder="Descripción" class="mt-2 w-full rounded-lg border border-ink/15 bg-canvas px-3 py-2 text-sm">{s.description}</textarea>
+            <div class="mt-2 flex gap-2">
+              <button type="button" class="save-service rounded-full bg-ink/10 px-3 py-1.5 text-xs font-medium hover:bg-ink/20">Guardar</button>
+              <button type="button" class="del-service rounded-full px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50">Eliminar</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // ---- Helpers ----
+    function getValues(card: Element, ...names: string[]) {
+      const data: Record<string, string> = {};
+      for (const n of names) {
+        const el = card.querySelector(`[name="${n}"]`) as HTMLInputElement | HTMLTextAreaElement;
+        data[n] = el?.value ?? '';
+      }
+      return data;
+    }
+
+    async function apiCall(url: string, method: string, body?: object) {
+      const res = await fetch(url, {
+        method,
+        headers: body ? { 'content-type': 'application/json' } : {},
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      return res.json();
+    }
+
+    // ---- TEAM ----
+    document.querySelectorAll('.save-team').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const card = btn.closest('.team-card')!;
+        const id = card.getAttribute('data-id');
+        const vals = getValues(card, 'name', 'role', 'photoUrl', 'bioShort', 'sortOrder', 'rotationDeg');
+        await apiCall('/api/admin/team', 'POST', { id: id ? Number(id) : null, ...vals, sortOrder: Number(vals.sortOrder), rotationDeg: Number(vals.rotationDeg) });
+        location.reload();
+      });
+    });
+    document.querySelectorAll('.del-team').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const card = btn.closest('.team-card')!;
+        const id = card.getAttribute('data-id');
+        if (id && confirm('¿Eliminar este miembro?')) {
+          await apiCall(`/api/admin/team?id=${id}`, 'DELETE');
+          location.reload();
+        }
+      });
+    });
+    document.getElementById('add-team')?.addEventListener('click', async () => {
+      await apiCall('/api/admin/team', 'POST', { name: 'Nuevo miembro', role: '', photoUrl: '', bioShort: '', sortOrder: 99, rotationDeg: 0 });
+      location.reload();
+    });
+
+    // ---- BRANDS ----
+    document.querySelectorAll('.save-brand').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const card = btn.closest('.brand-card')!;
+        const id = card.getAttribute('data-id');
+        const vals = getValues(card, 'name', 'logoSvgOrUrl', 'sortOrder');
+        await apiCall('/api/admin/brands', 'POST', { id: id ? Number(id) : null, ...vals, sortOrder: Number(vals.sortOrder) });
+        location.reload();
+      });
+    });
+    document.querySelectorAll('.del-brand').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const card = btn.closest('.brand-card')!;
+        const id = card.getAttribute('data-id');
+        if (id && confirm('¿Eliminar esta marca?')) {
+          await apiCall(`/api/admin/brands?id=${id}`, 'DELETE');
+          location.reload();
+        }
+      });
+    });
+    document.getElementById('add-brand')?.addEventListener('click', async () => {
+      await apiCall('/api/admin/brands', 'POST', { name: 'Nueva marca', logoSvgOrUrl: '', sortOrder: 99 });
+      location.reload();
+    });
+
+    // ---- SERVICES ----
+    document.querySelectorAll('.save-service').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const card = btn.closest('.service-card')!;
+        const id = card.getAttribute('data-id');
+        const vals = getValues(card, 'title', 'description', 'previewMediaUrl', 'sortOrder');
+        await apiCall('/api/admin/services', 'POST', { id: id ? Number(id) : null, ...vals, sortOrder: Number(vals.sortOrder) });
+        location.reload();
+      });
+    });
+    document.querySelectorAll('.del-service').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const card = btn.closest('.service-card')!;
+        const id = card.getAttribute('data-id');
+        if (id && confirm('¿Eliminar este servicio?')) {
+          await apiCall(`/api/admin/services?id=${id}`, 'DELETE');
+          location.reload();
+        }
+      });
+    });
+    document.getElementById('add-service')?.addEventListener('click', async () => {
+      await apiCall('/api/admin/services', 'POST', { title: 'Nuevo servicio', description: '', previewMediaUrl: '', sortOrder: 99 });
+      location.reload();
+    });
+  </script>
+</AdminLayout>

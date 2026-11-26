@@ -1,0 +1,248 @@
+---
+import AdminLayout from '../../../../layouts/AdminLayout.astro';
+import { getDb } from '../../../../db';
+import { projects } from '../../../../db/schema';
+import { eq } from 'drizzle-orm';
+
+const { id } = Astro.params;
+const d1 = Astro.locals.runtime?.env?.DB;
+if (!d1) return Astro.redirect('/admin/cms/proyectos');
+
+const db = getDb(d1);
+const isNew = id === 'new';
+
+type Project = typeof projects.$inferSelect;
+let project: Project | null = null;
+
+if (!isNew) {
+  const rows = await db.select().from(projects).where(eq(projects.id, Number(id))).limit(1);
+  project = rows[0] ?? null;
+  if (!project) return Astro.redirect('/admin/cms/proyectos');
+}
+
+const defaults = {
+  title: '', slug: '', client: '', year: new Date().getFullYear().toString(),
+  disciplines: '[]', summary: '', services: '', agency: 'Imprudente Dept. Creativo',
+  credits: '', coverMediaUrl: '', coverType: 'image' as const,
+  contentBlocks: '[]', featured: false, published: false, sortOrder: 0,
+};
+const p = project ?? defaults;
+---
+
+<AdminLayout title={isNew ? 'Nuevo proyecto' : `Editar: ${p.title}`} activeSection="proyectos">
+  <div class="max-w-3xl">
+    <a href="/admin/cms/proyectos" class="inline-flex items-center gap-1 text-sm text-ink/60 hover:text-ink">
+      ← Volver a Proyectos
+    </a>
+
+    <h1 class="mt-6 text-2xl font-medium tracking-tight">{isNew ? 'Nuevo proyecto' : 'Editar proyecto'}</h1>
+
+    <form id="project-form" class="mt-6 space-y-6">
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label for="title" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Título *</label>
+          <input id="title" name="title" type="text" required value={p.title}
+            class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none" />
+        </div>
+        <div>
+          <label for="slug" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Slug *</label>
+          <input id="slug" name="slug" type="text" required value={isNew ? '' : p.slug}
+            class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none"
+            placeholder="mi-proyecto" />
+        </div>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-3">
+        <div>
+          <label for="client" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Cliente *</label>
+          <input id="client" name="client" type="text" required value={p.client}
+            class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none" />
+        </div>
+        <div>
+          <label for="year" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Año</label>
+          <input id="year" name="year" type="text" value={p.year}
+            class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none" />
+        </div>
+        <div>
+          <label for="sortOrder" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Orden</label>
+          <input id="sortOrder" name="sortOrder" type="number" value={p.sortOrder}
+            class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none" />
+        </div>
+      </div>
+
+      <div>
+        <label for="disciplines" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Disciplinas (separadas por coma)</label>
+        <input id="disciplines" name="disciplines" type="text"
+          value={(() => { try { return JSON.parse(typeof p.disciplines === 'string' ? p.disciplines : '[]').join(', '); } catch { return ''; } })()}
+          class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none"
+          placeholder="Branding, Fotografía, Web" />
+      </div>
+
+      <div>
+        <label for="summary" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Resumen</label>
+        <textarea id="summary" name="summary" rows="3"
+          class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none"
+        >{p.summary}</textarea>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label for="services" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Servicios</label>
+          <input id="services" name="services" type="text" value={p.services}
+            class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none" />
+        </div>
+        <div>
+          <label for="agency" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Agencia</label>
+          <input id="agency" name="agency" type="text" value={p.agency}
+            class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none" />
+        </div>
+      </div>
+
+      <div>
+        <label for="credits" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Créditos</label>
+        <input id="credits" name="credits" type="text" value={p.credits}
+          class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none" />
+      </div>
+
+      <!-- Cover -->
+      <div>
+        <label class="block text-xs font-medium uppercase tracking-wider text-ink/50">Portada</label>
+        <div class="mt-2 flex items-center gap-4">
+          <input id="coverMediaUrl" name="coverMediaUrl" type="text" value={p.coverMediaUrl}
+            class="flex-1 rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none"
+            placeholder="/projects/slug/cover.webp o URL R2" />
+          <input id="coverFile" type="file" accept="image/*,video/*"
+            class="text-sm text-ink/60 file:mr-2 file:rounded-full file:border-0 file:bg-ink/5 file:px-3 file:py-2 file:text-xs file:font-medium" />
+        </div>
+        <select id="coverType" name="coverType" class="mt-2 rounded-xl border border-ink/15 bg-canvas px-4 py-2 text-sm focus:border-accent-blue focus:outline-none">
+          <option value="image" selected={p.coverType === 'image'}>Imagen</option>
+          <option value="video" selected={p.coverType === 'video'}>Video</option>
+        </select>
+      </div>
+
+      <!-- Content blocks -->
+      <div>
+        <label class="block text-xs font-medium uppercase tracking-wider text-ink/50">Bloques de contenido (JSON)</label>
+        <textarea id="contentBlocks" name="contentBlocks" rows="6"
+          class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 font-mono text-xs focus:border-accent-blue focus:outline-none"
+        >{typeof p.contentBlocks === 'string' ? p.contentBlocks : JSON.stringify(p.contentBlocks, null, 2)}</textarea>
+        <p class="mt-1 text-xs text-ink/40">Array JSON: [{`{"type":"image","url":"/…","caption":"…"}`}, {`{"type":"text","heading":"…","body":"…"}`}]</p>
+      </div>
+
+      <!-- Toggles -->
+      <div class="flex gap-6">
+        <label class="flex items-center gap-2 text-sm">
+          <input type="checkbox" name="featured" value="1" checked={p.featured} class="rounded border-ink/30" />
+          <span>Destacado</span>
+        </label>
+        <label class="flex items-center gap-2 text-sm">
+          <input type="checkbox" name="published" value="1" checked={isNew ? false : p.published} class="rounded border-ink/30" />
+          <span>Publicado</span>
+        </label>
+      </div>
+
+      <div class="flex items-center justify-between border-t border-ink/10 pt-4">
+        <p id="save-msg" class="text-sm text-accent-green hidden">Guardado ✓</p>
+        <div class="flex gap-3">
+          {!isNew && (
+            <button type="button" id="delete-btn"
+              class="rounded-full border border-red-300 px-5 py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50">
+              Eliminar
+            </button>
+          )}
+          <button type="submit"
+            class="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-canvas transition-colors hover:bg-accent-blue disabled:opacity-50">
+            {isNew ? 'Crear proyecto' : 'Guardar cambios'}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <script define:vars={{ projectId: isNew ? null : Number(id) }}>
+    // Auto-generate slug from title
+    const titleInput = document.getElementById('title');
+    const slugInput = document.getElementById('slug');
+    if (titleInput && slugInput && !slugInput.value) {
+      titleInput.addEventListener('input', () => {
+        slugInput.value = titleInput.value
+          .toLowerCase()
+          .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)/g, '');
+      });
+    }
+
+    // Upload cover file
+    const coverFile = document.getElementById('coverFile');
+    const coverUrl = document.getElementById('coverMediaUrl');
+    if (coverFile) {
+      coverFile.addEventListener('change', async () => {
+        const file = coverFile.files?.[0];
+        if (!file) return;
+        const fd = new FormData();
+        fd.append('file', file);
+        fd.append('path', `projects/${slugInput?.value || 'upload'}/${file.name}`);
+        const res = await fetch('/api/admin/media/upload', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (data.ok && data.url && coverUrl) coverUrl.value = data.url;
+      });
+    }
+
+    // Form submit
+    const form = document.getElementById('project-form');
+    const msg = document.getElementById('save-msg');
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fd = new FormData(form);
+        const disciplines = (fd.get('disciplines')?.toString() || '')
+          .split(',').map(s => s.trim()).filter(Boolean);
+        const body = {
+          title: fd.get('title'),
+          slug: fd.get('slug'),
+          client: fd.get('client'),
+          year: fd.get('year'),
+          disciplines: JSON.stringify(disciplines),
+          summary: fd.get('summary'),
+          services: fd.get('services'),
+          agency: fd.get('agency'),
+          credits: fd.get('credits'),
+          coverMediaUrl: fd.get('coverMediaUrl'),
+          coverType: fd.get('coverType'),
+          contentBlocks: fd.get('contentBlocks'),
+          featured: fd.has('featured'),
+          published: fd.has('published'),
+          sortOrder: Number(fd.get('sortOrder')) || 0,
+        };
+
+        const url = projectId ? `/api/admin/projects/${projectId}` : '/api/admin/projects';
+        const method = projectId ? 'PUT' : 'POST';
+        const res = await fetch(url, {
+          method,
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+        const data = await res.json();
+        if (data.ok) {
+          if (!projectId && data.id) {
+            window.location.href = `/admin/cms/proyectos/${data.id}`;
+          } else if (msg) {
+            msg.classList.remove('hidden');
+            setTimeout(() => msg.classList.add('hidden'), 2000);
+          }
+        }
+      });
+    }
+
+    // Delete
+    const delBtn = document.getElementById('delete-btn');
+    if (delBtn && projectId) {
+      delBtn.addEventListener('click', async () => {
+        if (!confirm('¿Eliminar este proyecto permanentemente?')) return;
+        const res = await fetch(`/api/admin/projects/${projectId}`, { method: 'DELETE' });
+        if (res.ok) window.location.href = '/admin/cms/proyectos';
+      });
+    }
+  </script>
+</AdminLayout>

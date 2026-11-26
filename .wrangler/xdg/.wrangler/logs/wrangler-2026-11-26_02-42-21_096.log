@@ -1,0 +1,101 @@
+
+--- 2026-11-26T02:42:21.347Z debug
+🪵  Writing logs to "C:\Users\Alejandro\Documents\07. Antigravity\01.Imprudente\.wrangler\xdg\.wrangler\logs\wrangler-2026-11-26_02-42-21_096.log"
+---
+
+--- 2026-11-26T02:42:21.346Z debug
+Metrics dispatcher: Dispatching disabled - would have sent {"deviceId":"f64c60c1-ad31-4f03-b002-8bc003790df3","event":"wrangler command started","timestamp":1795660941346,"properties":{"amplitude_session_id":1795660941343,"amplitude_event_id":0,"wranglerVersion":"4.60.0","wranglerMajorVersion":4,"wranglerMinorVersion":60,"wranglerPatchVersion":0,"osPlatform":"Windows","osVersion":"Windows 11 Home","nodeVersion":26,"packageManager":"npm","isFirstUsage":true,"configFileType":"toml","isCI":false,"isPagesCI":false,"isWorkersCI":false,"isInteractive":false,"hasAssets":true,"argsUsed":["local"],"argsCombination":"local","agent":null,"command":"wrangler d1 migrations apply","args":{}}}.
+---
+
+--- 2026-11-26T02:42:21.349Z debug
+.env file not found at "C:\Users\Alejandro\Documents\07. Antigravity\01.Imprudente\.env". Continuing... For more details, refer to https://developers.cloudflare.com/workers/wrangler/system-environment-variables/
+---
+
+--- 2026-11-26T02:42:21.350Z debug
+.env file not found at "C:\Users\Alejandro\Documents\07. Antigravity\01.Imprudente\.env.local". Continuing... For more details, refer to https://developers.cloudflare.com/workers/wrangler/system-environment-variables/
+---
+
+--- 2026-11-26T02:42:22.404Z log
+
+ ⛅️ wrangler 4.60.0 (update available 4.168.0)
+──────────────────────────────────────────────
+---
+
+--- 2026-11-26T02:42:22.405Z log
+Resource location: local 
+
+---
+
+--- 2026-11-26T02:42:22.405Z log
+Use --remote if you want to access the remote instance.
+
+---
+
+--- 2026-11-26T02:42:22.436Z log
+🌀 Executing on local database DB (00000000-0000-0000-0000-000000000000) from .wrangler\state\v3\d1:
+---
+
+--- 2026-11-26T02:42:22.436Z log
+🌀 To execute on your remote database, add a --remote flag to your wrangler command.
+---
+
+--- 2026-11-26T02:42:23.443Z log
+🚣 1 command executed successfully.
+---
+
+--- 2026-11-26T02:42:23.443Z log
+🌀 Executing on local database DB (00000000-0000-0000-0000-000000000000) from .wrangler\state\v3\d1:
+---
+
+--- 2026-11-26T02:42:23.443Z log
+🌀 To execute on your remote database, add a --remote flag to your wrangler command.
+---
+
+--- 2026-11-26T02:42:24.032Z log
+🚣 1 command executed successfully.
+---
+
+--- 2026-11-26T02:42:24.033Z log
+Migrations to be applied:
+---
+
+--- 2026-11-26T02:42:24.040Z log
+┌────────────────────────────┐
+│ name                       │
+├────────────────────────────┤
+│ 0000_kind_clint_barton.sql │
+└────────────────────────────┘
+---
+
+--- 2026-11-26T02:42:24.040Z log
+? About to apply 1 migration(s)
+Your database may not be available to serve requests during the migration, continue?
+---
+
+--- 2026-11-26T02:42:24.040Z log
+🤖 Using fallback value in non-interactive context: yes
+---
+
+--- 2026-11-26T02:42:24.041Z log
+🌀 Executing on local database DB (00000000-0000-0000-0000-000000000000) from .wrangler\state\v3\d1:
+---
+
+--- 2026-11-26T02:42:24.041Z log
+🌀 To execute on your remote database, add a --remote flag to your wrangler command.
+---
+
+--- 2026-11-26T02:42:24.662Z log
+🚣 13 commands executed successfully.
+---
+
+--- 2026-11-26T02:42:24.664Z log
+┌────────────────────────────┬────────┐
+│ name                       │ status │
+├────────────────────────────┼────────┤
+│ 0000_kind_clint_barton.sql │ ✅     │
+└────────────────────────────┴────────┘
+---
+
+--- 2026-11-26T02:42:24.667Z debug
+Metrics dispatcher: Dispatching disabled - would have sent {"deviceId":"f64c60c1-ad31-4f03-b002-8bc003790df3","event":"wrangler command completed","timestamp":1795660944667,"properties":{"amplitude_session_id":1795660941343,"amplitude_event_id":1,"wranglerVersion":"4.60.0","wranglerMajorVersion":4,"wranglerMinorVersion":60,"wranglerPatchVersion":0,"osPlatform":"Windows","osVersion":"Windows 11 Home","nodeVersion":26,"packageManager":"npm","isFirstUsage":true,"configFileType":"toml","isCI":false,"isPagesCI":false,"isWorkersCI":false,"isInteractive":false,"hasAssets":true,"argsUsed":["local"],"argsCombination":"local","agent":null,"command":"wrangler d1 migrations apply","args":{},"durationMs":3347,"durationSeconds":3.347,"durationMinutes":0.05578333333333333}}.
+---

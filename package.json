@@ -1,0 +1,31 @@
+{
+  "name": "imprudente-portfolio",
+  "type": "module",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "wrangler dev",
+    "astro": "astro",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:local": "wrangler d1 migrations apply DB --local",
+    "db:seed:local": "node scripts/seed.mjs --local",
+    "typecheck": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^12.6.0",
+    "@tailwindcss/vite": "^4.1.0",
+    "astro": "^5.7.0",
+    "drizzle-orm": "^0.41.0",
+    "tailwindcss": "^4.1.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@cloudflare/workers-types": "^4.20260120.0",
+    "drizzle-kit": "^0.30.6",
+    "sharp": "^0.34.1",
+    "typescript": "^5.8.0",
+    "wrangler": "~4.60.0"
+  }
+}

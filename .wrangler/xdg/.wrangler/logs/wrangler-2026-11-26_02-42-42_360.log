@@ -1,0 +1,68 @@
+
+--- 2026-11-26T02:42:42.622Z debug
+🪵  Writing logs to "C:\Users\Alejandro\Documents\07. Antigravity\01.Imprudente\.wrangler\xdg\.wrangler\logs\wrangler-2026-11-26_02-42-42_360.log"
+---
+
+--- 2026-11-26T02:42:42.622Z debug
+Metrics dispatcher: Dispatching disabled - would have sent {"deviceId":"f64c60c1-ad31-4f03-b002-8bc003790df3","event":"wrangler command started","timestamp":1795660962622,"properties":{"amplitude_session_id":1795660962618,"amplitude_event_id":0,"wranglerVersion":"4.60.0","wranglerMajorVersion":4,"wranglerMinorVersion":60,"wranglerPatchVersion":0,"osPlatform":"Windows","osVersion":"Windows 11 Home","nodeVersion":26,"packageManager":"npm","isFirstUsage":true,"configFileType":"toml","isCI":false,"isPagesCI":false,"isWorkersCI":false,"isInteractive":false,"hasAssets":true,"argsUsed":["command","local"],"argsCombination":"command, local","agent":null,"command":"wrangler d1 execute","args":{}}}.
+---
+
+--- 2026-11-26T02:42:42.626Z debug
+.env file not found at "C:\Users\Alejandro\Documents\07. Antigravity\01.Imprudente\.env". Continuing... For more details, refer to https://developers.cloudflare.com/workers/wrangler/system-environment-variables/
+---
+
+--- 2026-11-26T02:42:42.626Z debug
+.env file not found at "C:\Users\Alejandro\Documents\07. Antigravity\01.Imprudente\.env.local". Continuing... For more details, refer to https://developers.cloudflare.com/workers/wrangler/system-environment-variables/
+---
+
+--- 2026-11-26T02:42:42.644Z log
+
+ ⛅️ wrangler 4.60.0 (update available 4.168.0)
+──────────────────────────────────────────────
+---
+
+--- 2026-11-26T02:42:42.645Z log
+Resource location: local 
+
+---
+
+--- 2026-11-26T02:42:42.645Z log
+Use --remote if you want to access the remote instance.
+
+---
+
+--- 2026-11-26T02:42:42.666Z log
+🌀 Executing on local database DB (00000000-0000-0000-0000-000000000000) from .wrangler\state\v3\d1:
+---
+
+--- 2026-11-26T02:42:42.666Z log
+🌀 To execute on your remote database, add a --remote flag to your wrangler command.
+---
+
+--- 2026-11-26T02:42:43.493Z log
+🚣 1 command executed successfully.
+---
+
+--- 2026-11-26T02:42:43.494Z log
+[
+  {
+    "results": [
+      {
+        "users": 1,
+        "projects": 4,
+        "team": 2,
+        "brands": 8,
+        "services": 4
+      }
+    ],
+    "success": true,
+    "meta": {
+      "duration": 1
+    }
+  }
+]
+---
+
+--- 2026-11-26T02:42:43.497Z debug
+Metrics dispatcher: Dispatching disabled - would have sent {"deviceId":"f64c60c1-ad31-4f03-b002-8bc003790df3","event":"wrangler command completed","timestamp":1795660963497,"properties":{"amplitude_session_id":1795660962618,"amplitude_event_id":1,"wranglerVersion":"4.60.0","wranglerMajorVersion":4,"wranglerMinorVersion":60,"wranglerPatchVersion":0,"osPlatform":"Windows","osVersion":"Windows 11 Home","nodeVersion":26,"packageManager":"npm","isFirstUsage":true,"configFileType":"toml","isCI":false,"isPagesCI":false,"isWorkersCI":false,"isInteractive":false,"hasAssets":true,"argsUsed":["command","local"],"argsCombination":"command, local","agent":null,"command":"wrangler d1 execute","args":{},"durationMs":911,"durationSeconds":0.911,"durationMinutes":0.015183333333333333}}.
+---

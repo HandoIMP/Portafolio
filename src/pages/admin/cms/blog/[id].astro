@@ -1,0 +1,204 @@
+---
+import AdminLayout from '../../../../layouts/AdminLayout.astro';
+import { getDb } from '../../../../db';
+import { blogPosts } from '../../../../db/schema';
+import { eq } from 'drizzle-orm';
+
+const { id } = Astro.params;
+const d1 = Astro.locals.runtime?.env?.DB;
+if (!d1) return Astro.redirect('/admin/cms/blog');
+
+const db = getDb(d1);
+const isNew = id === 'new';
+
+type BlogPost = typeof blogPosts.$inferSelect;
+let post: BlogPost | null = null;
+
+if (!isNew) {
+  const rows = await db.select().from(blogPosts).where(eq(blogPosts.id, Number(id))).limit(1);
+  post = rows[0] ?? null;
+  if (!post) return Astro.redirect('/admin/cms/blog');
+}
+
+const defaults = {
+  title: '', slug: '', excerpt: '', seoTitle: '', seoDescription: '',
+  coverUrl: '', contentMarkdown: '', status: 'draft' as const, publishedAt: null,
+};
+const p = post ?? defaults;
+---
+
+<AdminLayout title={isNew ? 'Nuevo artículo' : `Editar: ${p.title}`} activeSection="blog">
+  <div class="max-w-3xl">
+    <a href="/admin/cms/blog" class="inline-flex items-center gap-1 text-sm text-ink/60 hover:text-ink">
+      ← Volver a Blog
+    </a>
+
+    <h1 class="mt-6 text-2xl font-medium tracking-tight">{isNew ? 'Nuevo artículo' : 'Editar artículo'}</h1>
+
+    <form id="blog-form" class="mt-6 space-y-6">
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label for="title" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Título *</label>
+          <input id="title" name="title" type="text" required value={p.title}
+            class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none" />
+        </div>
+        <div>
+          <label for="slug" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Slug *</label>
+          <input id="slug" name="slug" type="text" required value={isNew ? '' : p.slug}
+            class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none"
+            placeholder="mi-articulo" />
+        </div>
+      </div>
+
+      <div>
+        <label for="excerpt" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Extracto *</label>
+        <textarea id="excerpt" name="excerpt" rows="2" required
+          class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none"
+        >{p.excerpt}</textarea>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label for="seoTitle" class="block text-xs font-medium uppercase tracking-wider text-ink/50">SEO Título</label>
+          <input id="seoTitle" name="seoTitle" type="text" value={p.seoTitle}
+            class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none"
+            placeholder="Si vacío, usa el título" />
+        </div>
+        <div>
+          <label for="seoDescription" class="block text-xs font-medium uppercase tracking-wider text-ink/50">SEO Descripción</label>
+          <input id="seoDescription" name="seoDescription" type="text" value={p.seoDescription}
+            class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none" />
+        </div>
+      </div>
+
+      <!-- Cover -->
+      <div>
+        <label class="block text-xs font-medium uppercase tracking-wider text-ink/50">Portada</label>
+        <div class="mt-2 flex items-center gap-4">
+          <input id="coverUrl" name="coverUrl" type="text" value={p.coverUrl}
+            class="flex-1 rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none"
+            placeholder="/blog/cover.webp" />
+          <input id="coverFile" type="file" accept="image/*"
+            class="text-sm text-ink/60 file:mr-2 file:rounded-full file:border-0 file:bg-ink/5 file:px-3 file:py-2 file:text-xs file:font-medium" />
+        </div>
+      </div>
+
+      <!-- Markdown content -->
+      <div>
+        <label for="content" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Contenido (Markdown) *</label>
+        <textarea id="content" name="content" rows="16" required
+          class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 font-mono text-sm focus:border-accent-blue focus:outline-none"
+        >{p.contentMarkdown}</textarea>
+      </div>
+
+      <!-- Status -->
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label for="status" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Estado</label>
+          <select id="status" name="status"
+            class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+            <option value="draft" selected={p.status === 'draft'}>Borrador</option>
+            <option value="published" selected={p.status === 'published'}>Publicado</option>
+          </select>
+        </div>
+        <div>
+          <label for="publishedAt" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Fecha publicación</label>
+          <input id="publishedAt" name="publishedAt" type="datetime-local"
+            value={p.publishedAt ? p.publishedAt.slice(0, 16) : ''}
+            class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none" />
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between border-t border-ink/10 pt-4">
+        <p id="save-msg" class="text-sm text-accent-green hidden">Guardado ✓</p>
+        <div class="flex gap-3">
+          {!isNew && (
+            <button type="button" id="delete-btn"
+              class="rounded-full border border-red-300 px-5 py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50">
+              Eliminar
+            </button>
+          )}
+          <button type="submit"
+            class="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-canvas transition-colors hover:bg-accent-blue disabled:opacity-50">
+            {isNew ? 'Crear artículo' : 'Guardar cambios'}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <script define:vars={{ postId: isNew ? null : Number(id) }}>
+    // Auto-slug
+    const titleInput = document.getElementById('title');
+    const slugInput = document.getElementById('slug');
+    if (titleInput && slugInput && !slugInput.value) {
+      titleInput.addEventListener('input', () => {
+        slugInput.value = titleInput.value
+          .toLowerCase()
+          .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)/g, '');
+      });
+    }
+
+    // Upload cover
+    const coverFile = document.getElementById('coverFile');
+    const coverUrl = document.getElementById('coverUrl');
+    if (coverFile) {
+      coverFile.addEventListener('change', async () => {
+        const file = coverFile.files?.[0];
+        if (!file) return;
+        const fd = new FormData();
+        fd.append('file', file);
+        fd.append('path', `blog/${slugInput?.value || 'upload'}/${file.name}`);
+        const res = await fetch('/api/admin/media/upload', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (data.ok && data.url && coverUrl) coverUrl.value = data.url;
+      });
+    }
+
+    // Submit
+    const form = document.getElementById('blog-form');
+    const msg = document.getElementById('save-msg');
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fd = new FormData(form);
+        const body = {
+          title: fd.get('title'),
+          slug: fd.get('slug'),
+          excerpt: fd.get('excerpt'),
+          seoTitle: fd.get('seoTitle') || fd.get('title'),
+          seoDescription: fd.get('seoDescription') || fd.get('excerpt'),
+          coverUrl: fd.get('coverUrl'),
+          contentMarkdown: fd.get('content'),
+          status: fd.get('status'),
+          publishedAt: fd.get('publishedAt') ? new Date(fd.get('publishedAt')).toISOString() : null,
+        };
+
+        const url = postId ? `/api/admin/blog/${postId}` : '/api/admin/blog';
+        const method = postId ? 'PUT' : 'POST';
+        const res = await fetch(url, { method, headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+        const data = await res.json();
+        if (data.ok) {
+          if (!postId && data.id) {
+            window.location.href = `/admin/cms/blog/${data.id}`;
+          } else if (msg) {
+            msg.classList.remove('hidden');
+            setTimeout(() => msg.classList.add('hidden'), 2000);
+          }
+        }
+      });
+    }
+
+    // Delete
+    const delBtn = document.getElementById('delete-btn');
+    if (delBtn && postId) {
+      delBtn.addEventListener('click', async () => {
+        if (!confirm('¿Eliminar este artículo permanentemente?')) return;
+        const res = await fetch(`/api/admin/blog/${postId}`, { method: 'DELETE' });
+        if (res.ok) window.location.href = '/admin/cms/blog';
+      });
+    }
+  </script>
+</AdminLayout>

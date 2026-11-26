@@ -1,0 +1,7 @@
+# Copia este archivo a .dev.vars para desarrollo local (nunca subas .dev.vars a Git)
+ADMIN_EMAIL=Imprudente.sw@gmail.com
+ADMIN_INITIAL_PASSWORD=cambia-esta-contrasena-segura
+SESSION_SECRET=genera-una-cadena-aleatoria-larga-de-32-chars
+TURNSTILE_SITE_KEY=1x00000000000000000000AA
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+R2_PUBLIC_URL=/api/media

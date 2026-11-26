@@ -1,0 +1,45 @@
+globalThis.process ??= {}; globalThis.process.env ??= {};
+import { e as createComponent, k as renderComponent, r as renderTemplate, h as createAstro, l as defineScriptVars, g as addAttribute, m as maybeRenderHead } from '../../../chunks/astro/server_BAIfklZH.mjs';
+import { $ as $$AdminLayout } from '../../../chunks/AdminLayout_DJn6Cqw_.mjs';
+import { g as getDb, f as crmLeads, e as eq } from '../../../chunks/index_w6lK2Ajg.mjs';
+export { renderers } from '../../../renderers.mjs';
+
+var __freeze = Object.freeze;
+var __defProp = Object.defineProperty;
+var __template = (cooked, raw) => __freeze(__defProp(cooked, "raw", { value: __freeze(raw || cooked.slice()) }));
+var _a;
+const $$Astro = createAstro();
+const $$id = createComponent(async ($$result, $$props, $$slots) => {
+  const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
+  Astro2.self = $$id;
+  const { id } = Astro2.params;
+  const d1 = Astro2.locals.runtime?.env?.DB;
+  if (!d1 || !id) return Astro2.redirect("/admin/crm");
+  const db = getDb(d1);
+  const rows = await db.select().from(crmLeads).where(eq(crmLeads.id, Number(id))).limit(1);
+  const lead = rows[0];
+  if (!lead) return Astro2.redirect("/admin/crm");
+  const statuses = ["Nuevo", "Contactado", "En Propuesta", "Cerrado", "Descartado"];
+  const statusColors = {
+    Nuevo: "bg-accent-orange/15 text-accent-orange",
+    Contactado: "bg-accent-blue/15 text-accent-blue",
+    "En Propuesta": "bg-yellow-100 text-yellow-700",
+    Cerrado: "bg-accent-green/15 text-green-700",
+    Descartado: "bg-ink/8 text-ink/50"
+  };
+  return renderTemplate`${renderComponent($$result, "AdminLayout", $$AdminLayout, { "title": `Lead: ${lead.name}`, "activeSection": "crm" }, { "default": async ($$result2) => renderTemplate(_a || (_a = __template([" ", '<div class="max-w-3xl"> <a href="/admin/crm" class="inline-flex items-center gap-1 text-sm text-ink/60 hover:text-ink">\n\u2190 Volver a Leads\n</a> <div class="mt-6 rounded-2xl border border-ink/10 bg-white p-6"> <div class="flex flex-wrap items-start justify-between gap-4"> <div> <h1 class="text-xl font-medium">', '</h1> <p class="mt-1 text-sm text-ink/60">', "</p> ", " ", " </div> <span", "> ", ' </span> </div> <div class="mt-6 grid gap-4 sm:grid-cols-2"> ', " ", ' <div> <p class="text-xs font-medium uppercase tracking-wider text-ink/50">P\xE1gina fuente</p> <p class="mt-1 text-sm">', '</p> </div> <div> <p class="text-xs font-medium uppercase tracking-wider text-ink/50">Fecha</p> <p class="mt-1 text-sm">', '</p> </div> </div> <div class="mt-6 border-t border-ink/10 pt-4"> <p class="text-xs font-medium uppercase tracking-wider text-ink/50">Mensaje</p> <p class="mt-2 whitespace-pre-wrap text-sm leading-relaxed">', '</p> </div> </div> <!-- Status changer + Notes --> <form id="lead-form" class="mt-6 rounded-2xl border border-ink/10 bg-white p-6 space-y-4"> <h2 class="text-sm font-medium">Gesti\xF3n interna</h2> <div> <label for="status" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Estado</label> <select id="status" name="status" class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none"> ', ' </select> </div> <div> <label for="notes" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Notas internas</label> <textarea id="notes" name="notes" rows="4" class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none" placeholder="Notas privadas sobre este lead...">', '</textarea> </div> <div class="flex items-center justify-between"> <p id="save-msg" class="text-sm text-accent-green hidden">Guardado \u2713</p> <button type="submit" class="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-canvas transition-colors hover:bg-accent-blue disabled:opacity-50">\nGuardar cambios\n</button> </div> </form> </div> <script>(function(){', "\n    const form = document.getElementById('lead-form');\n    const msg = document.getElementById('save-msg');\n    if (form) {\n      form.addEventListener('submit', async (e) => {\n        e.preventDefault();\n        const fd = new FormData(form);\n        const res = await fetch(`/api/admin/leads/${leadId}`, {\n          method: 'PUT',\n          headers: { 'content-type': 'application/json' },\n          body: JSON.stringify({\n            status: fd.get('status'),\n            internalNotes: fd.get('notes'),\n          }),\n        });\n        if (res.ok && msg) {\n          msg.classList.remove('hidden');\n          setTimeout(() => msg.classList.add('hidden'), 2000);\n        }\n      });\n    }\n  })();<\/script> "], [" ", '<div class="max-w-3xl"> <a href="/admin/crm" class="inline-flex items-center gap-1 text-sm text-ink/60 hover:text-ink">\n\u2190 Volver a Leads\n</a> <div class="mt-6 rounded-2xl border border-ink/10 bg-white p-6"> <div class="flex flex-wrap items-start justify-between gap-4"> <div> <h1 class="text-xl font-medium">', '</h1> <p class="mt-1 text-sm text-ink/60">', "</p> ", " ", " </div> <span", "> ", ' </span> </div> <div class="mt-6 grid gap-4 sm:grid-cols-2"> ', " ", ' <div> <p class="text-xs font-medium uppercase tracking-wider text-ink/50">P\xE1gina fuente</p> <p class="mt-1 text-sm">', '</p> </div> <div> <p class="text-xs font-medium uppercase tracking-wider text-ink/50">Fecha</p> <p class="mt-1 text-sm">', '</p> </div> </div> <div class="mt-6 border-t border-ink/10 pt-4"> <p class="text-xs font-medium uppercase tracking-wider text-ink/50">Mensaje</p> <p class="mt-2 whitespace-pre-wrap text-sm leading-relaxed">', '</p> </div> </div> <!-- Status changer + Notes --> <form id="lead-form" class="mt-6 rounded-2xl border border-ink/10 bg-white p-6 space-y-4"> <h2 class="text-sm font-medium">Gesti\xF3n interna</h2> <div> <label for="status" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Estado</label> <select id="status" name="status" class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none"> ', ' </select> </div> <div> <label for="notes" class="block text-xs font-medium uppercase tracking-wider text-ink/50">Notas internas</label> <textarea id="notes" name="notes" rows="4" class="mt-2 w-full rounded-xl border border-ink/15 bg-canvas px-4 py-3 text-sm focus:border-accent-blue focus:outline-none" placeholder="Notas privadas sobre este lead...">', '</textarea> </div> <div class="flex items-center justify-between"> <p id="save-msg" class="text-sm text-accent-green hidden">Guardado \u2713</p> <button type="submit" class="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-canvas transition-colors hover:bg-accent-blue disabled:opacity-50">\nGuardar cambios\n</button> </div> </form> </div> <script>(function(){', "\n    const form = document.getElementById('lead-form');\n    const msg = document.getElementById('save-msg');\n    if (form) {\n      form.addEventListener('submit', async (e) => {\n        e.preventDefault();\n        const fd = new FormData(form);\n        const res = await fetch(\\`/api/admin/leads/\\${leadId}\\`, {\n          method: 'PUT',\n          headers: { 'content-type': 'application/json' },\n          body: JSON.stringify({\n            status: fd.get('status'),\n            internalNotes: fd.get('notes'),\n          }),\n        });\n        if (res.ok && msg) {\n          msg.classList.remove('hidden');\n          setTimeout(() => msg.classList.add('hidden'), 2000);\n        }\n      });\n    }\n  })();<\/script> "])), maybeRenderHead(), lead.name, lead.email, lead.phone && renderTemplate`<p class="text-sm text-ink/60">${lead.phone}</p>`, lead.company && renderTemplate`<p class="text-sm text-ink/60">${lead.company}</p>`, addAttribute(["rounded-full px-3 py-1.5 text-xs font-medium", statusColors[lead.status] || "bg-ink/8 text-ink/50"], "class:list"), lead.status, lead.serviceInterest && renderTemplate`<div> <p class="text-xs font-medium uppercase tracking-wider text-ink/50">Servicio de interés</p> <p class="mt-1 text-sm">${lead.serviceInterest}</p> </div>`, lead.budgetRange && renderTemplate`<div> <p class="text-xs font-medium uppercase tracking-wider text-ink/50">Rango de presupuesto</p> <p class="mt-1 text-sm">${lead.budgetRange}</p> </div>`, lead.sourcePage, new Date(lead.createdAt).toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" }), lead.message, statuses.map((s) => renderTemplate`<option${addAttribute(s, "value")}${addAttribute(lead.status === s, "selected")}>${s}</option>`), lead.internalNotes, defineScriptVars({ leadId: lead.id })) })}`;
+}, "C:/Users/Alejandro/Documents/07. Antigravity/01.Imprudente/src/pages/admin/crm/[id].astro", void 0);
+
+const $$file = "C:/Users/Alejandro/Documents/07. Antigravity/01.Imprudente/src/pages/admin/crm/[id].astro";
+const $$url = "/admin/crm/[id]";
+
+const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: $$id,
+  file: $$file,
+  url: $$url
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const page = () => _page;
+
+export { page };

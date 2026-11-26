@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('/fonts/general-sans/GeneralSans-Variable.woff2') format('woff2');
+  font-weight: 200 700;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('/fonts/general-sans/GeneralSans-VariableItalic.woff2') format('woff2');
+  font-weight: 200 700;
+  font-display: swap;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Boska';
+  src: url('/fonts/boska/Boska-Variable.woff2') format('woff2');
+  font-weight: 200 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Boska';
+  src: url('/fonts/boska/Boska-VariableItalic.woff2') format('woff2');
+  font-weight: 200 900;
+  font-display: swap;
+  font-style: italic;
+}
+
+@theme {
+  --color-canvas: #F4F4F4;
+  --color-ink: #111111;
+  --color-accent-blue: #0214B6;
+  --color-accent-green: #CDFD6C;
+  --color-accent-orange: #F55814;
+
+  --font-sans: 'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Boska', Georgia, serif;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: var(--color-accent-green);
+    color: var(--color-ink);
+  }
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-mask {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 30s linear infinite;
+  will-change: transform;
+}
+
+.marquee-wrap:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Progressive entrance motion: composited properties only */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 600ms ease, transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-reveal="visible"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  .marquee-track {
+    animation: none;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+}

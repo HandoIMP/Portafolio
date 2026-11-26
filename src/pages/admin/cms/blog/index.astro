@@ -1,0 +1,65 @@
+---
+import AdminLayout from '../../../../layouts/AdminLayout.astro';
+import { getDb } from '../../../../db';
+import { blogPosts } from '../../../../db/schema';
+import { desc } from 'drizzle-orm';
+
+const d1 = Astro.locals.runtime?.env?.DB;
+type BlogPost = typeof blogPosts.$inferSelect;
+let posts: BlogPost[] = [];
+
+if (d1) {
+  const db = getDb(d1);
+  try {
+    posts = await db.select().from(blogPosts).orderBy(desc(blogPosts.updatedAt));
+  } catch { /* empty */ }
+}
+---
+
+<AdminLayout title="Blog" activeSection="blog">
+  <div class="max-w-4xl">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-medium tracking-tight">Blog</h1>
+        <p class="mt-1 text-sm text-ink/60">{posts.length} artículo{posts.length !== 1 ? 's' : ''}</p>
+      </div>
+      <a
+        href="/admin/cms/blog/new"
+        class="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-canvas transition-colors hover:bg-accent-blue"
+      >
+        + Nuevo artículo
+      </a>
+    </div>
+
+    {posts.length === 0 ? (
+      <div class="mt-12 text-center text-sm text-ink/50">
+        <p>Sin artículos aún. Crea el primero.</p>
+      </div>
+    ) : (
+      <div class="mt-6 space-y-3">
+        {posts.map((post) => (
+          <a
+            href={`/admin/cms/blog/${post.id}`}
+            class="flex items-center gap-4 rounded-xl border border-ink/10 bg-white px-5 py-4 transition-shadow hover:shadow-md"
+          >
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2">
+                <p class="truncate font-medium">{post.title}</p>
+                <span class:list={[
+                  'shrink-0 rounded px-1.5 py-0.5 text-xs font-medium',
+                  post.status === 'published' ? 'bg-accent-green/15 text-green-700' : 'bg-ink/8 text-ink/50',
+                ]}>
+                  {post.status === 'published' ? 'Publicado' : 'Borrador'}
+                </span>
+              </div>
+              <p class="mt-0.5 line-clamp-1 text-sm text-ink/60">{post.excerpt}</p>
+            </div>
+            <span class="shrink-0 text-xs text-ink/40">
+              {new Date(post.updatedAt).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}
+            </span>
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</AdminLayout>

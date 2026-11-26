@@ -1,0 +1,16 @@
+{
+  "protocol": "http",
+  "host": "127.0.0.1",
+  "port": 60754,
+  "entrypointAddresses": {
+    "default": {
+      "host": "127.0.0.1",
+      "port": 60755
+    },
+    "pageMap": {
+      "host": "127.0.0.1",
+      "port": 60756
+    }
+  },
+  "durableObjects": []
+}
